@@ -96,7 +96,11 @@ class FacebookAuthenticator extends SocialAuthenticator
                 $user = $this->userManager->createUser();
                 $user->setEnabled(true);
                 $user->setEmail($email);
-                $user->setUsername("your chosen username");
+                $user->setUsername($facebookUser->getName());
+                $user->setFirstName($facebookUser->getFirstName());
+                $user->setLastName($facebookUser->getLastName());
+                $user->setGender($facebookUser->getGender());
+                $user->setPictureUrl($facebookUser->getPictureUrl());
                 $user->setPlainPassword("your chosen password");
             }
         }
@@ -105,6 +109,8 @@ class FacebookAuthenticator extends SocialAuthenticator
         // a User object
         $user->setFacebookId($facebookUser->getId());
         $this->userManager->updateUser($user);
+
+        dd($facebookUser);
 
         return $userProvider->loadUserByUsername($user->getUsername());
     }

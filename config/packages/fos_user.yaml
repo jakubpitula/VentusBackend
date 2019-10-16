@@ -3,5 +3,5 @@ fos_user:
     firewall_name: main
     user_class: App\Entity\User
     from_email:
-        address: "contact@ventus.pl"
-        sender_name: "contact@ventus.pl"
+        address: "contact@ventus.com"
+        sender_name: "contact@ventus.com"

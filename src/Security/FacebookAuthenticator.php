@@ -77,6 +77,7 @@ class FacebookAuthenticator extends SocialAuthenticator
         /** @var FacebookUser $facebookUser */
         $facebookUser = $this->getFacebookClient()
             ->fetchUserFromToken($credentials);
+       dd($this->getFacebookClient()->fetchUser()->get);
 
         $email = $facebookUser->getEmail();
 

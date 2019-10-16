@@ -24,6 +24,10 @@ security:
 
             logout:       true
             anonymous:    true
+            guard:
+                provider: fos_userbundle
+                authenticators:
+                    - App\Security\FacebookAuthenticator
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
 

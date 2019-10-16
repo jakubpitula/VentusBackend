@@ -63,12 +63,12 @@ class FacebookAuthenticator extends SocialAuthenticator
     public function getCredentials(Request $request)
     {
         // this method is only called if supports() returns true
-
         return $this->fetchAccessToken($this->getFacebookClient());
     }
 
     /**
      * @param mixed $credentials
+     * @param Request $request
      * @param UserProviderInterface $userProvider
      * @return User|null|object|\Symfony\Component\Security\Core\User\UserInterface
      */
@@ -77,8 +77,6 @@ class FacebookAuthenticator extends SocialAuthenticator
         /** @var FacebookUser $facebookUser */
         $facebookUser = $this->getFacebookClient()
             ->fetchUserFromToken($credentials);
-       dd($this->getFacebookClient()->fetchUser()->get);
-
         $email = $facebookUser->getEmail();
 
         // 1) have they logged in with Facebook before? Easy!
@@ -103,6 +101,13 @@ class FacebookAuthenticator extends SocialAuthenticator
                 $user->setGender($facebookUser->getGender());
                 $user->setPictureUrl($facebookUser->getPictureUrl());
                 $user->setPlainPassword("your chosen password");
+
+                $baseUrl = 'https://graph.facebook.com/me/?fields=birthday&access_token='.$credentials->getToken();
+                $response = file_get_contents($baseUrl);
+                
+                $data = json_decode($response, true);
+
+                $user->setBirthday($data['birthday']);
             }
         }
 
@@ -110,8 +115,6 @@ class FacebookAuthenticator extends SocialAuthenticator
         // a User object
         $user->setFacebookId($facebookUser->getId());
         $this->userManager->updateUser($user);
-
-        dd($facebookUser);
 
         return $userProvider->loadUserByUsername($user->getUsername());
     }

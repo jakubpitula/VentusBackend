@@ -78,7 +78,6 @@ class FacebookAuthenticator extends SocialAuthenticator
         $facebookUser = $this->getFacebookClient()
             ->fetchUserFromToken($credentials);
         $email = $facebookUser->getEmail();
-
         // 1) have they logged in with Facebook before? Easy!
         $existingUser = $this->em->getRepository(User::class)
             ->findOneBy(['facebook_id' => $facebookUser->getId()]);
@@ -102,12 +101,14 @@ class FacebookAuthenticator extends SocialAuthenticator
                 $user->setPictureUrl($facebookUser->getPictureUrl());
                 $user->setPlainPassword("your chosen password");
 
-                $baseUrl = 'https://graph.facebook.com/me/?fields=birthday&access_token='.$credentials->getToken();
+                $baseUrl = 'https://graph.facebook.com/me/?fields=birthday,location&access_token='.$credentials->getToken();
                 $response = file_get_contents($baseUrl);
                 
                 $data = json_decode($response, true);
 
                 $user->setBirthday($data['birthday']);
+
+                $user->setLocation($data['location']['name']);
             }
         }
 

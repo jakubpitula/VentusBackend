@@ -42,6 +42,6 @@ class UserService
         foreach ($data as $d) {
             $normalized[] = $this->userNormalizer->normalize($d);
         }
-        return $normalized[0];
+        return empty($normalized) ? $normalized : $normalized[0];
     }
 }

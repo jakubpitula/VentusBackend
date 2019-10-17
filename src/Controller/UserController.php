@@ -28,13 +28,43 @@ class UserController extends AbstractController
      * @return JsonResponse
      * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
      */
-    public function getById(Request $request)
+    public function getByToken(Request $request)
     {
         $status = JsonResponse::HTTP_OK;
 
         $data = [];
+        $user = $this->tokenStorage->getToken()->getUser();
 
-        $id = $this->tokenStorage->getToken()->getUser()->getId();
+        if(!property_exists($user, 'id')){
+            return new JsonResponse($data, $status);
+        }
+
+        $id = $user->getId();
+
+        try {
+            $data = $this->userService->findAllById($id);
+
+        } catch (\Exception $exception) {
+            $status = JsonResponse::HTTP_NO_CONTENT;
+            $output = new ConsoleOutput();
+            $output->writeln($exception->getMessage());
+        }
+
+
+        return new JsonResponse($data, $status);
+    }
+
+    /**
+     * @Route("/api/user/{id}", name="api_user_id")
+     * @param integer $id
+     * @return JsonResponse
+     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     */
+    public function getById(Request $request, $id)
+    {
+        $status = JsonResponse::HTTP_OK;
+
+        $data = [];
 
         try {
             $data = $this->userService->findAllById($id);

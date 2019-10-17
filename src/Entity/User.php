@@ -47,6 +47,11 @@ class User extends BaseUser
      * @ORM\Column(type="string", nullable=true)
      */
     private $birthday;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $location;
     
     /**
      * Set facebook_id
@@ -133,6 +138,18 @@ class User extends BaseUser
     public function setBirthday(?string $birthday): self
     {
         $this->birthday = $birthday;
+        return $this;
+    }
+
+    public function getLocation(): ?string
+    {
+        return $this->location;
+    }
+
+    public function setLocation(?string $location): self
+    {
+        $this->location = $location;
+
         return $this;
     }
 }

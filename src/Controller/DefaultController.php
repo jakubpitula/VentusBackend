@@ -17,10 +17,10 @@ class DefaultController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/login", name="login")
-     */
-    public function login(){
-        return $this->redirectToRoute('connect_facebook_start');
-    }
+    // /**
+    //  * @Route("/login", name="login")
+    //  */
+    // public function login(){
+    //     return $this->redirectToRoute('connect_facebook_start');
+    // }
 }

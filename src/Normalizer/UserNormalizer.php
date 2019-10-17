@@ -28,6 +28,7 @@ class UserNormalizer implements NormalizerInterface
             'gender' => $object->getGender(),
             'picture_url' => $object->getPictureUrl(),
             'birthday' => $object->getBirthday(),
+            'location' => $object->getLocation()
         ];
     }
 

@@ -20,7 +20,7 @@ class FacebookController extends AbstractController
         return $clientRegistry
             ->getClient('facebook')
             ->redirect([
-                'public_profile', 'email', 'user_gender', 'user_birthday' // the scopes you want to access
+                'public_profile', 'email', 'user_gender', 'user_birthday', 'user_location' // the scopes you want to access
             ])
         ;
     }
@@ -37,6 +37,6 @@ class FacebookController extends AbstractController
      */
     public function connectCheckAction(Request $request, ClientRegistry $clientRegistry)
     {
-        return $this->redirectToRoute('api_user');
+        return $this->redirectToRoute('default');
     }
 }

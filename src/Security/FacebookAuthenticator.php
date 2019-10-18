@@ -74,17 +74,9 @@ class FacebookAuthenticator extends SocialAuthenticator
      */
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
-        echo 'BŁĄD';
-        die();
-        $client = $this->getFacebookClient();
-        $accessToken = $client->getAccessToken();
-        // if ($accessToken && !$accessToken->getToken()) {
-        // }
-        $provider = $client->getOAuth2Provider();
-        $longLivedToken = $provider->getLongLivedAccessToken($accessToken);
-
         /** @var FacebookUser $facebookUser */
-        $facebookUser = $client->fetchUserFromToken($longLivedToken);
+        $facebookUser = $this->getFacebookClient()
+            ->fetchUserFromToken($credentials);
         $email = $facebookUser->getEmail();
         // 1) have they logged in with Facebook before? Easy!
         $existingUser = $this->em->getRepository(User::class)
@@ -114,9 +106,9 @@ class FacebookAuthenticator extends SocialAuthenticator
                 
                 $data = json_decode($response, true);
 
-                $user->setBirthday($data['birthday']);
+                if(isset($data['birthday'])) $user->setBirthday($data['birthday']);
 
-                $user->setLocation($data['location']['name']);
+                if(isset($data['location'])) $user->setLocation($data['location']['name']);
             }
         }
         

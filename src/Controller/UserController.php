@@ -38,7 +38,6 @@ class UserController extends AbstractController
         if(!property_exists($user, 'id')){
             $response = new JsonResponse($data,$status);
             // $response->headers->set('Access-Control-Allow-Origin', '*');
-            dd($response);
 
             return $response;
         }
@@ -57,7 +56,7 @@ class UserController extends AbstractController
 
         $response = new JsonResponse($data,$status);
         // $response->headers->set('Access-Control-Allow-Origin', '*');
-
+        dd($response);
         return $response;
     }
 

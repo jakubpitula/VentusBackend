@@ -82,4 +82,12 @@ class UserController extends AbstractController
 
         return new JsonResponse($data, $status);
     }
+
+    /**
+     * @Route("/profile/edit", name="fos_user_profile_edit")
+     */
+    public function edit(Request $request){
+        //todo
+    }
+
 }

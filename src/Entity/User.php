@@ -1,6 +1,8 @@
 <?php
 // src/Entity/User.php
 namespace App\Entity;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 /**
@@ -52,6 +54,28 @@ class User extends BaseUser
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $location;
+
+    /**
+     * @ORM\Column(type="array", nullable=true)
+     */
+    private $percentages = [];
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Category", inversedBy="users")
+     */
+    private $categories;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Subcategory", inversedBy="users")
+     */
+    private $subcategories;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->Categories = new ArrayCollection();
+        $this->subcategories = new ArrayCollection();
+    }
     
     /**
      * Set facebook_id
@@ -149,6 +173,70 @@ class User extends BaseUser
     public function setLocation(?string $location): self
     {
         $this->location = $location;
+
+        return $this;
+    }
+
+    public function getPercentages(): ?array
+    {
+        return $this->percentages;
+    }
+
+    public function setPercentages(?array $percentages): self
+    {
+        $this->percentages = $percentages;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Category[]
+     */
+    public function getCategories(): Collection
+    {
+        return $this->categories;
+    }
+
+    public function addCategory(Category $category): self
+    {
+        if (!$this->categories->contains($category)) {
+            $this->categories[] = $category;
+        }
+
+        return $this;
+    }
+
+    public function removeCategory(Category $category): self
+    {
+        if ($this->categories->contains($category)) {
+            $this->categories->removeElement($category);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Subcategory[]
+     */
+    public function getSubcategories(): Collection
+    {
+        return $this->subcategories;
+    }
+
+    public function addSubcategory(Subcategory $subcategory): self
+    {
+        if (!$this->subcategories->contains($subcategory)) {
+            $this->subcategories[] = $subcategory;
+        }
+
+        return $this;
+    }
+
+    public function removeSubcategory(Subcategory $subcategory): self
+    {
+        if ($this->subcategories->contains($subcategory)) {
+            $this->subcategories->removeElement($subcategory);
+        }
 
         return $this;
     }

@@ -37,6 +37,6 @@ class FacebookController extends AbstractController
      */
     public function connectCheckAction(Request $request, ClientRegistry $clientRegistry)
     {
-        return $this->redirect('http://1.0.0.0');
+        return 'https://ventusapp.herokuapp.com';
     }
 }

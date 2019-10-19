@@ -32,7 +32,7 @@ class FacebookController extends AbstractController
      * @param Request $request
      * @param ClientRegistry $clientRegistry
      *
-     * @Route("/connect/facebook/check", name="connect_facebook_check")
+     * @Route("/connect/facebook", name="connect_facebook_check")
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function connectCheckAction(Request $request, ClientRegistry $clientRegistry)

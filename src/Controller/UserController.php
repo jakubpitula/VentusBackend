@@ -36,7 +36,10 @@ class UserController extends AbstractController
         $user = $this->tokenStorage->getToken()->getUser();
 
         if(!property_exists($user, 'id')){
-            return new JsonResponse($data, $status);
+            $response = new JsonResponse($data,$status);
+            // $response->headers->set('Access-Control-Allow-Origin', '*');
+
+            return $response;
         }
 
         $id = $user->getId();
@@ -51,7 +54,8 @@ class UserController extends AbstractController
         }
 
 
-        return new JsonResponse($data, $status);
+        $response = new JsonResponse($data,$status);
+        return $response;
     }
 
     /**

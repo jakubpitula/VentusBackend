@@ -7,9 +7,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\CategoryRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\SubcategoryRepository")
  */
-class Category
+class Subcategory
 {
     /**
      * @ORM\Id()
@@ -24,7 +24,7 @@ class Category
     private $name;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\User", mappedBy="categories")
+     * @ORM\ManyToMany(targetEntity="App\Entity\User", mappedBy="subcategories")
      */
     private $users;
 
@@ -62,7 +62,7 @@ class Category
     {
         if (!$this->users->contains($user)) {
             $this->users[] = $user;
-            $user->addCategory($this);
+            $user->addSubcategory($this);
         }
 
         return $this;
@@ -72,7 +72,7 @@ class Category
     {
         if ($this->users->contains($user)) {
             $this->users->removeElement($user);
-            $user->removeCategory($this);
+            $user->removeSubcategory($this);
         }
 
         return $this;

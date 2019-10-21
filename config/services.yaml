@@ -32,3 +32,6 @@ services:
     App\Normalizer\:
         resource: '../src/Normalizer/*'
         tags: ['app.normalizer']
+    App\Controller\RegistrationController:
+        arguments:
+            $formFactory: '@fos_user.registration.form.factory'

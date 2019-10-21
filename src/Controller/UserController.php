@@ -90,7 +90,6 @@ class UserController extends AbstractController
      * @Route("/api/check_email", name="email_check", methods={"POST", "GET"})
      */
     public function checkEmail(Request $request){
-        return new JsonResponse();
         $data = $this->userManager->findUserByEmail($request->request->get('email'));
         if($data === null){
             $response = ['status' => 'register'];
@@ -99,7 +98,4 @@ class UserController extends AbstractController
         
         return new JsonResponse($response);
     }
-
-
-
 }

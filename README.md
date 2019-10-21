@@ -2,14 +2,14 @@
 
 1. Login:
 
-path: /login
+path: /api/login
 
 Przesyłając POST request pod /login trzeba dodać header 'Content-Type': 'application/json'. W JSON'ie przesłać 'username' 
 i 'password'. W przypadku pomyślnej autentykacji zwrócony zostanie status 200, a w przypadku niepomyślnej - 401 i message error.
 
 2. Sprawdzanie maila:
 
-path: /check_email
+path: /api/check_email
 
 W requeście POST przesłać 'email'.
 Jeśli email jest w bazie, zwracane jest 'status': 'login'.
@@ -17,7 +17,7 @@ Jeśli nie ma - 'status': 'register'
 
 3. Rejestracja:
 
-path: /register
+path: /api/register
 
 Wymagane dane w requeście POST: 'password', 'username', 'email', 'picture', 'gender', 'location', 'first_name', 'birthday', 'messenger'. Póki co wszystko jest typu string.
 

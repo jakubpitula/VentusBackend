@@ -29,6 +29,7 @@ W przypadku błędu walidacji zwracane jest 401 i 'error': 'wiadomość o błęd
 path: /api/user
 
 Nie podawać żadnych danych w requeście.
+'picture' zawiera nazwę pliku. Ścieżka do plików: public/images/pictures
 
 4.2. Zwracanie danych dowolnego użytkownika wg id:
 

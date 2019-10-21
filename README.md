@@ -9,7 +9,7 @@ i 'password'. W przypadku pomyślnej autentykacji zwrócony zostanie status 200,
 
 2. Sprawdzanie maila:
 
-path: /check_user
+path: /check_email
 
 W requeście POST przesłać 'email'.
 Jeśli email jest w bazie, zwracane jest 'status': 'login'.

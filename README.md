@@ -34,4 +34,4 @@ Nie podawać żadnych danych w requeście.
 
 path: /api/user/{id}
 
-W requeście GET podać numer id użytkownika, którego chcemy sprawdzić.
+W requeście GET podać 'id' użytkownika, którego chcemy sprawdzić.

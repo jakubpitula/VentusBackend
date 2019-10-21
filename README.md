@@ -19,7 +19,7 @@ Jeśli nie ma - 'status': 'register'
 
 path: /api/register
 
-Wymagane dane w requeście POST: 'password', 'username', 'email', 'picture', 'gender', 'location', 'first_name', 'birthday', 'messenger'. Póki co wszystko jest typu string.
+Wymagane dane w requeście POST: 'password', 'username', 'email', 'picture', 'gender', 'location', 'first_name', 'birthday', 'messenger'. 'picture' jest typem File. Reszta to typ string.
 
 Zwracany jest pusty status 200, jeśli udało się zarejestrować.
 W przypadku błędu walidacji zwracane jest 401 i 'error': 'wiadomość o błędzie'.

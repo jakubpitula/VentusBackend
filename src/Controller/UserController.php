@@ -87,7 +87,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/check_email", name="email_check")
+     * @Route("/api/check_email", name="email_check")
      */
     public function checkEmail(Request $request){
         $data = $this->userManager->findUserByEmail($request->request->get('email'));

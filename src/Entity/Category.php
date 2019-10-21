@@ -28,9 +28,15 @@ class Category
      */
     private $users;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Subcategory", mappedBy="category")
+     */
+    private $subcategories;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
+        $this->subcategories = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -73,6 +79,37 @@ class Category
         if ($this->users->contains($user)) {
             $this->users->removeElement($user);
             $user->removeCategory($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Subcategory[]
+     */
+    public function getSubcategories(): Collection
+    {
+        return $this->subcategories;
+    }
+
+    public function addSubcategory(Subcategory $subcategory): self
+    {
+        if (!$this->subcategories->contains($subcategory)) {
+            $this->subcategories[] = $subcategory;
+            $subcategory->setCategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSubcategory(Subcategory $subcategory): self
+    {
+        if ($this->subcategories->contains($subcategory)) {
+            $this->subcategories->removeElement($subcategory);
+            // set the owning side to null (unless already changed)
+            if ($subcategory->getCategory() === $this) {
+                $subcategory->setCategory(null);
+            }
         }
 
         return $this;

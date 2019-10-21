@@ -9,21 +9,41 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Services\CategoryService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
- * @Route("/category")
+ * @Route("/api/category")
  */
 class CategoryController extends AbstractController
 {
+    private $categoryService;
+
+    public function __construct(CategoryService $categoryService)
+    {
+        $this->categoryService = $categoryService;
+    }
+    
     /**
      * @Route("/", name="category_index", methods={"GET"})
      */
-    public function index(CategoryRepository $categoryRepository): Response
+    public function getAll(): Response
     {
-        return $this->render('category/index.html.twig', [
-            'categories' => $categoryRepository->findAll(),
-        ]);
+        $status = JsonResponse::HTTP_OK;
+
+        $data = [];
+
+        try {
+            $data = $this->categoryService->findAll();
+
+        } catch (\Exception $exception) {
+            $status = JsonResponse::HTTP_NO_CONTENT;
+            $output = new ConsoleOutput();
+            $output->writeln($exception->getMessage());
+        }
+
+
+        return new JsonResponse($data, $status);
     }
 
     /**
@@ -31,23 +51,23 @@ class CategoryController extends AbstractController
      */
     public function new(Request $request): Response
     {
-        // $category = new Category();
-        // $form = $this->createForm(CategoryType::class, $category);
-        // $form->handleRequest($request);
+        $category = new Category();
+        $form = $this->createForm(CategoryType::class, $category);
+        $form->handleRequest($request);
 
-        // if ($form->isSubmitted() && $form->isValid()) {
-        //     $entityManager = $this->getDoctrine()->getManager();
-        //     $entityManager->persist($category);
-        //     $entityManager->flush();
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($category);
+            $entityManager->flush();
 
-        //     return $this->redirectToRoute('category_index');
-        // }
+            return $this->redirectToRoute('category_index');
+        }
 
-        // return $this->render('category/new.html.twig', [
-        //     'category' => $category,
-        //     'form' => $form->createView(),
-        // ]);
-        return new JsonResponse($request->get('name'));
+        return $this->render('category/new.html.twig', [
+            'category' => $category,
+            'form' => $form->createView(),
+        ]);
+        // return new JsonResponse($request->get('name'));
     }
 
     /**

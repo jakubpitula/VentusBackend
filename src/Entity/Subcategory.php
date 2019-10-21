@@ -28,6 +28,11 @@ class Subcategory
      */
     private $users;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="subcategories")
+     */
+    private $category;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -74,6 +79,18 @@ class Subcategory
             $this->users->removeElement($user);
             $user->removeSubcategory($this);
         }
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): self
+    {
+        $this->category = $category;
 
         return $this;
     }

@@ -10,16 +10,19 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;;
 use App\Services\UserService;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use FOS\UserBundle\Model\UserManagerInterface;
 
 class UserController extends AbstractController
 {
     private $userService;
     private $tokenStorage;
+    private $userManager;
 
-    public function __construct(UserService $userService, TokenStorageInterface $tokenStorage)
+    public function __construct(UserService $userService, TokenStorageInterface $tokenStorage, UserManagerInterface $userManager)
     {
         $this->userService = $userService;
         $this->tokenStorage = $tokenStorage;
+        $this->userManager = $userManager;
     }
 
     /**
@@ -84,10 +87,18 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/profile/edit", name="fos_user_profile_edit")
+     * @Route("/check_email", name="email_check")
      */
-    public function edit(Request $request){
-        //todo
+    public function checkEmail(Request $request){
+        $data = $this->userManager->findUserByEmail($request->request->get('email'));
+        if($data === null){
+            $response = ['status' => 'register'];
+        }
+        else $response = ['status' => 'login'];
+        
+        return new JsonResponse($response);
     }
+
+
 
 }

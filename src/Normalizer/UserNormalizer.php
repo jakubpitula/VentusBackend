@@ -22,13 +22,12 @@ class UserNormalizer implements NormalizerInterface
         return [
             'id' => $object->getId(),
             'email' => $object->getEmail(),
-            'facebook_id' => $object->getFacebookId(),
             'first_name' => $object->getFirstName(),
-            'last_name' => $object->getLastName(),
             'gender' => $object->getGender(),
-            'picture_url' => $object->getPictureUrl(),
+            'picture' => $object->getPicture(),
             'birthday' => $object->getBirthday(),
-            'location' => $object->getLocation()
+            'location' => $object->getLocation(),
+            'messenger' => $object->getMessenger()
         ];
     }
 

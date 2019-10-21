@@ -24,7 +24,7 @@ class UserNormalizer implements NormalizerInterface
             'email' => $object->getEmail(),
             'first_name' => $object->getFirstName(),
             'gender' => $object->getGender(),
-            'picture' => $object->getPicture(),
+            'picture' => $object->getPictureName(),
             'birthday' => $object->getBirthday(),
             'location' => $object->getLocation(),
             'messenger' => $object->getMessenger()

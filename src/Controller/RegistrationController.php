@@ -62,6 +62,7 @@ class RegistrationController extends BaseController
         }
 
         $data = $request->request->all();
+        $files = $request->files->all();
         
         $isEmailUnique = isset($data['email']) ? $this->userManager->findUserByEmail($data['email']) : null;
         $isUsernameUnique = isset($data['username']) ? $this->userManager->findUserByUsername($data['username']) : null;
@@ -69,7 +70,7 @@ class RegistrationController extends BaseController
         if(!isset($data['password'])) return new JsonResponse(['error' => 'Password not set'], 401);
         if(!isset($data['username'])) return new JsonResponse(['error' => 'Username not set'], 401);
         if(!isset($data['email'])) return new JsonResponse(['error' => 'Email not set'], 401);
-        if(!isset($data['picture'])) return new JsonResponse(['error' => 'Picture not set'], 401);
+        if(!isset($files['picture'])) return new JsonResponse(['error' => 'Picture not set'], 401);
         if(!isset($data['gender'])) return new JsonResponse(['error' => 'Gender not set'], 401);
         if(!isset($data['location'])) return new JsonResponse(['error' => 'Password not set'], 401);
         if(!isset($data['first_name'])) return new JsonResponse(['error' => 'First_name not set'], 401);
@@ -89,7 +90,7 @@ class RegistrationController extends BaseController
         $user->setLocation($data['location']);
         $user->setPassword($this->encoder->encodePassword($user, $data['password']));
         $user->setBirthday($data['birthday']);
-        $user->setPicture($data['picture']);
+        $user->setPictureFile($files['picture']);
         $user->setMessenger($data['messenger']);
         
         $this->em->persist($user);

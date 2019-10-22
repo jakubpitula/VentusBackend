@@ -1,39 +1,53 @@
 # VentusBackend
 
-1. Login:
+```
+url: ventusapi.herokuapp.com
+```
 
-path: /api/login
+## 1. Login:
 
-Przesyłając POST request pod /login trzeba dodać header 'Content-Type': 'application/json'. W JSON'ie przesłać 'email' 
-i 'password'. W przypadku pomyślnej autentykacji zwrócony zostanie status 200, a w przypadku niepomyślnej - 401 i message error.
+```
+/api/login
+```
 
-2. Sprawdzanie maila:
+Przesyłając POST request pod /login trzeba dodać header ```'Content-Type': 'application/json'``` . W JSON'ie przesłać ```'email'```
+i ```'password'```. W przypadku pomyślnej autentykacji zwrócony zostanie status 200, a w przypadku niepomyślnej - 401 i message error.
 
-path: /api/check_email
+## 2. Sprawdzanie maila:
 
-W requeście POST przesłać 'email'.
-Jeśli email jest w bazie, zwracane jest 'status': 'login'.
-Jeśli nie ma - 'status': 'register'
+```
+/api/check_email
+```
 
-3. Rejestracja:
+W requeście POST przesłać ```'email'```.
+Jeśli email jest w bazie, zwracane jest ```'status': 'login'.```
+Jeśli nie ma - ```'status': 'register'```
 
-path: /api/register
+## 3. Rejestracja:
 
-Wymagane dane w requeście POST: 'password', 'email', 'gender', 'location', 'first_name', 'birthday', 'messenger'.
-Niewymagane, ale zalecane: 'picture'. 'picture' jest typem File. Reszta to typ string.
+```
+/api/register
+```
+
+Wymagane dane w requeście POST: ```'password', 'email', 'gender', 'location', 'first_name', 'birthday', 'messenger'```.
+Niewymagane, ale zalecane: ```'picture'```. ```'picture'``` jest typem File. Reszta to typ string.
 
 Zwracany jest pusty status 200, jeśli udało się zarejestrować.
 W przypadku błędu walidacji zwracane jest 401 i 'error': 'wiadomość o błędzie'.
 
-4.1 Zwracanie danych akualnie zalogowanego użytkownika:
+## 4.1 Zwracanie danych akualnie zalogowanego użytkownika:
 
-path: /api/user
+```
+/api/user
+```
 
 Nie podawać żadnych danych w requeście.
-'picture' zawiera nazwę pliku. Ścieżka do plików: public/images/pictures
+```'picture'``` zawiera nazwę pliku. Ścieżka do plików:``` public/images/pictures```
 
-4.2. Zwracanie danych dowolnego użytkownika wg id:
+### 4.2. Zwracanie danych dowolnego użytkownika wg id:
 
-path: /api/user/{id}
+```
+/api/user/{id}
+```
 
-W requeście GET podać 'id' użytkownika, którego chcemy sprawdzić.
+W requeście GET podać ```'id'``` użytkownika, którego chcemy sprawdzić.

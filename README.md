@@ -4,7 +4,7 @@
 
 path: /api/login
 
-Przesyłając POST request pod /login trzeba dodać header 'Content-Type': 'application/json'. W JSON'ie przesłać 'username' 
+Przesyłając POST request pod /login trzeba dodać header 'Content-Type': 'application/json'. W JSON'ie przesłać 'email' 
 i 'password'. W przypadku pomyślnej autentykacji zwrócony zostanie status 200, a w przypadku niepomyślnej - 401 i message error.
 
 2. Sprawdzanie maila:
@@ -19,7 +19,8 @@ Jeśli nie ma - 'status': 'register'
 
 path: /api/register
 
-Wymagane dane w requeście POST: 'password', 'username', 'email', 'picture', 'gender', 'location', 'first_name', 'birthday', 'messenger'. 'picture' jest typem File. Reszta to typ string.
+Wymagane dane w requeście POST: 'password', 'email', 'gender', 'location', 'first_name', 'birthday', 'messenger'.
+Niewymagane, ale zalecane: 'picture'. 'picture' jest typem File. Reszta to typ string.
 
 Zwracany jest pusty status 200, jeśli udało się zarejestrować.
 W przypadku błędu walidacji zwracane jest 401 i 'error': 'wiadomość o błędzie'.

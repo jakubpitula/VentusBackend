@@ -236,4 +236,14 @@ class User extends BaseUser
     {
         return $this->pictureName;
     }
+
+    /**
+     * @param string $email
+     * @return User
+     */
+    public function setEmail($email)
+    {
+        $this->setUsername($email);
+        return parent::setEmail($email);
+    }
 }

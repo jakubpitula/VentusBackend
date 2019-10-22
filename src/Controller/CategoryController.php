@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Entity\Subcategory;
 use App\Services\SubcategoryService;
 use Symfony\Component\Console\Output\ConsoleOutput;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * @Route("/api/category")
@@ -22,11 +23,13 @@ class CategoryController extends AbstractController
 {
     private $categoryService;
     private $subcategoryService;
+    private $em;
 
-    public function __construct(CategoryService $categoryService, SubcategoryService $subcategoryService)
+    public function __construct(CategoryService $categoryService, SubcategoryService $subcategoryService, EntityManagerInterface $em)
     {
         $this->categoryService = $categoryService;
         $this->subcategoryService = $subcategoryService;
+        $this->em = $em;
     }
     
     /**
@@ -40,6 +43,28 @@ class CategoryController extends AbstractController
 
         try {
             $data = $this->categoryService->findAll();
+
+        } catch (\Exception $exception) {
+            $status = JsonResponse::HTTP_NO_CONTENT;
+            $output = new ConsoleOutput();
+            $output->writeln($exception->getMessage());
+        }
+
+
+        return new JsonResponse($data, $status);
+    }
+
+    /**
+     * @Route("/{id}", name="category_show", methods={"GET"})
+     */
+    public function getById(Category $category): Response
+    {
+        $status = JsonResponse::HTTP_OK;
+
+        $data = [];
+
+        try {
+            $data = $this->categoryService->findAllById($category->getId());
 
         } catch (\Exception $exception) {
             $status = JsonResponse::HTTP_NO_CONTENT;
@@ -74,49 +99,22 @@ class CategoryController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="subcategory_show", methods={"GET"})
-     */
-    public function getById(Category $category): Response
-    {
-        $status = JsonResponse::HTTP_OK;
-
-        $data = [];
-
-        try {
-            $data = $this->categoryService->findAllById($category);
-
-        } catch (\Exception $exception) {
-            $status = JsonResponse::HTTP_NO_CONTENT;
-            $output = new ConsoleOutput();
-            $output->writeln($exception->getMessage());
-        }
-
-
-        return new JsonResponse($data, $status);
-    }
-
-    /**
-     * @Route("/new", name="category_new", methods={"GET","POST"})
+     * @Route("/new", name="category_new", methods={"POST"})
      */
     public function new(Request $request): Response
     {
+        $data = $request->request->all();
+
         $category = new Category();
-        $form = $this->createForm(CategoryType::class, $category);
-        $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($category);
-            $entityManager->flush();
+        if(!isset($data['name'])) return new JsonResponse(['error' => 'Name not set'], 401);
 
-            return $this->redirectToRoute('category_index');
-        }
+        $category->setName($data['name']);
 
-        return $this->render('category/new.html.twig', [
-            'category' => $category,
-            'form' => $form->createView(),
-        ]);
-        // return new JsonResponse($request->get('name'));
+        $this->em->persist($category);
+        $this->em->flush();
+
+        return new JsonResponse([], 201);
     }
 
 

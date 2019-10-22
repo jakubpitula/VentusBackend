@@ -65,12 +65,9 @@ class RegistrationController extends BaseController
         $files = $request->files->all();
         
         $isEmailUnique = isset($data['email']) ? $this->userManager->findUserByEmail($data['email']) : null;
-        $isUsernameUnique = isset($data['username']) ? $this->userManager->findUserByUsername($data['username']) : null;
 
         if(!isset($data['password'])) return new JsonResponse(['error' => 'Password not set'], 401);
-        if(!isset($data['username'])) return new JsonResponse(['error' => 'Username not set'], 401);
         if(!isset($data['email'])) return new JsonResponse(['error' => 'Email not set'], 401);
-        if(!isset($files['picture'])) return new JsonResponse(['error' => 'Picture not set'], 401);
         if(!isset($data['gender'])) return new JsonResponse(['error' => 'Gender not set'], 401);
         if(!isset($data['location'])) return new JsonResponse(['error' => 'Location not set'], 401);
         if(!isset($data['first_name'])) return new JsonResponse(['error' => 'First_name not set'], 401);
@@ -81,17 +78,15 @@ class RegistrationController extends BaseController
         if(!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) return new JsonResponse(['error' => 'Invalid email'], 401);
 
         if($isEmailUnique!==null) return new JsonResponse(['error' => 'Email already exists'], 401);
-        if($isUsernameUnique!==null) return new JsonResponse(['error' => 'Username already exists'], 401);
 
         $user->setFirstName($data['first_name']);
-        $user->setUsername($data['username']);
         $user->setEmail($data['email']);
         $user->setGender($data['gender']);
         $user->setLocation($data['location']);
         $user->setPassword($this->encoder->encodePassword($user, $data['password']));
         $user->setBirthday($data['birthday']);
-        $user->setPictureFile($files['picture']);
         $user->setMessenger($data['messenger']);
+        if(isset($files['picture'])) $user->setPictureFile($files['picture']);
         
         $this->em->persist($user);
         $this->em->flush();

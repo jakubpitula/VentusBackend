@@ -55,5 +55,16 @@ class CategoryService
         }
 
         return $normalized;
+    }
+
+    public function findBySubcategory($sub)
+    {
+        $data = $this->categoryRepository->findById($id);
+        $normalized = [];
+
+        foreach ($data as $d) {
+            $normalized[] = $this->categoryNormalizer->normalize($d);
         }
+        return empty($normalized) ? $normalized : $normalized[0];
+    }
 }

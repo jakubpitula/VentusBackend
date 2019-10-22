@@ -5,19 +5,23 @@ namespace App\Normalizer;
 use mysql_xdevapi\Collection;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use App\Entity\Category;
-use App\Services\SubcategoryService;
+use App\Entity\Subcategory;
+use App\Services\CategoryService;
 
-class CategoryNormalizer implements NormalizerInterface
+/**
+ * TUTAJ JEST PROBLEM Z CIRCULAR REFERENCE
+ */
+
+class SubcategoryNormalizer implements NormalizerInterface
 {
 
     private $container;
-    private $subcategoryService;
+    private $categoryService;
 
-    public function __construct(ContainerInterface $container, SubcategoryService $subcategoryService)
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
-        $this->subcategoryService = $subcategoryService;
+        // $this->categoryService = $categoryService;
     }
 
     public function normalize($object, $format = null, array $context = []): array
@@ -25,12 +29,12 @@ class CategoryNormalizer implements NormalizerInterface
         return [
             'id' => $object->getId(),
             'name' => $object->getName(),
-            'subcategories' => $this->subcategoryService->findAllByCategory($object->getId())
+            'category' => $object->getCategory()->getId()
         ];
     }
 
     public function supportsNormalization($data, $format = null): bool
     {
-        return $data instanceof Category;
+        return $data instanceof Subcategory;
     }
 }

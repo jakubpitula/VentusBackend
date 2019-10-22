@@ -11,6 +11,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Services\CategoryService;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Entity\Subcategory;
+use App\Services\SubcategoryService;
+use Symfony\Component\Console\Output\ConsoleOutput;
 
 /**
  * @Route("/api/category")
@@ -18,10 +21,12 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class CategoryController extends AbstractController
 {
     private $categoryService;
+    private $subcategoryService;
 
-    public function __construct(CategoryService $categoryService)
+    public function __construct(CategoryService $categoryService, SubcategoryService $subcategoryService)
     {
         $this->categoryService = $categoryService;
+        $this->subcategoryService = $subcategoryService;
     }
     
     /**
@@ -35,6 +40,28 @@ class CategoryController extends AbstractController
 
         try {
             $data = $this->categoryService->findAll();
+
+        } catch (\Exception $exception) {
+            $status = JsonResponse::HTTP_NO_CONTENT;
+            $output = new ConsoleOutput();
+            $output->writeln($exception->getMessage());
+        }
+
+
+        return new JsonResponse($data, $status);
+    }
+
+    /**
+     * @Route("/{id}/subcategories")
+     */
+    public function getSubcategories(Category $category): Response
+    {
+        $status = JsonResponse::HTTP_OK;
+
+        $data = [];
+
+        try {
+            $data = $this->subcategoryService->findAllByCategory($category);
 
         } catch (\Exception $exception) {
             $status = JsonResponse::HTTP_NO_CONTENT;

@@ -74,6 +74,28 @@ class CategoryController extends AbstractController
     }
 
     /**
+     * @Route("/{id}", name="subcategory_show", methods={"GET"})
+     */
+    public function getById(Category $category): Response
+    {
+        $status = JsonResponse::HTTP_OK;
+
+        $data = [];
+
+        try {
+            $data = $this->categoryService->findAllById($category);
+
+        } catch (\Exception $exception) {
+            $status = JsonResponse::HTTP_NO_CONTENT;
+            $output = new ConsoleOutput();
+            $output->writeln($exception->getMessage());
+        }
+
+
+        return new JsonResponse($data, $status);
+    }
+
+    /**
      * @Route("/new", name="category_new", methods={"GET","POST"})
      */
     public function new(Request $request): Response
@@ -97,15 +119,6 @@ class CategoryController extends AbstractController
         // return new JsonResponse($request->get('name'));
     }
 
-    /**
-     * @Route("/{id}", name="category_show", methods={"GET"})
-     */
-    public function show(Category $category): Response
-    {
-        return $this->render('category/show.html.twig', [
-            'category' => $category,
-        ]);
-    }
 
     /**
      * @Route("/{id}/edit", name="category_edit", methods={"GET","POST"})

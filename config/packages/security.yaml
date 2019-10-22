@@ -20,7 +20,7 @@ security:
             logout:       true
             anonymous:    true
             json_login:
-                check_path: /login
+                check_path: /api/login
                 provider: fos_userbundle
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication

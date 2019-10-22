@@ -33,7 +33,7 @@ class SecurityController extends BaseController
      */
     public function loginAction(Request $request)
     {
-        return new Response();
+        return new JsonResponse(['logged' => null !== $request->headers->get('Content-Type')?'yes':'no']);
     }
 
     public function checkAction()

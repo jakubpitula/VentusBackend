@@ -40,7 +40,6 @@ class UserController extends AbstractController
 
         if(!property_exists($user, 'id')){
             $response = new JsonResponse($data,$status);
-            // $response->headers->set('Access-Control-Allow-Origin', '*');
 
             return $response;
         }

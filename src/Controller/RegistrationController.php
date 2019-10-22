@@ -72,7 +72,7 @@ class RegistrationController extends BaseController
         if(!isset($data['email'])) return new JsonResponse(['error' => 'Email not set'], 401);
         if(!isset($files['picture'])) return new JsonResponse(['error' => 'Picture not set'], 401);
         if(!isset($data['gender'])) return new JsonResponse(['error' => 'Gender not set'], 401);
-        if(!isset($data['location'])) return new JsonResponse(['error' => 'Password not set'], 401);
+        if(!isset($data['location'])) return new JsonResponse(['error' => 'Location not set'], 401);
         if(!isset($data['first_name'])) return new JsonResponse(['error' => 'First_name not set'], 401);
         if(!isset($data['birthday'])) return new JsonResponse(['error' => 'Birthday not set'], 401);
         if(!isset($data['messenger'])) return new JsonResponse(['error' => 'Messenger not set'], 401);

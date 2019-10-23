@@ -11,7 +11,7 @@ url: ventusapi.herokuapp.com
 ```
 
 Przesyłając POST request pod /login trzeba dodać header ```'Content-Type': 'application/json'``` . W JSON'ie przesłać ```'username'``` (de facto email)
-i ```'password'```. W przypadku pomyślnej autentykacji zwrócony zostanie status 200 oraz token, a w przypadku niepomyślnej - 401 i message error.
+i ```'password'```. W przypadku pomyślnej autentykacji zwrócony zostanie status 200, token oraz refresh_token, a w przypadku niepomyślnej - 401 i message error.
 
 ## 2. Sprawdzanie maila:
 
@@ -53,3 +53,11 @@ Nie podawać żadnych danych w requeście.
 ```
 
 W requeście GET podać ```'id'``` użytkownika, którego chcemy sprawdzić.
+
+### 5. Odświeżanie tokenu JWT:
+
+```
+/api/token/refresh
+```
+
+W requeście POST form data podać ```'refresh_token'``` wygenerowany poprzednio po zalogowaniu. Wygenerowany zostanie nowy JWT dla usera.

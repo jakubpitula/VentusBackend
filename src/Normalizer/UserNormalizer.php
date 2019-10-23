@@ -31,7 +31,8 @@ class UserNormalizer implements NormalizerInterface
             'birthday' => $object->getBirthday(),
             'location' => $object->getLocation(),
             'messenger' => $object->getMessenger(),
-            'categories' => $this->categoryService->findByUser($object->getId())];
+            // 'categories' => $this->categoryService->findByUser($object->getId())
+        ];
     }
 
     public function supportsNormalization($data, $format = null): bool

@@ -10,6 +10,7 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Controller managing security.
@@ -33,7 +34,8 @@ class SecurityController extends BaseController
      */
     public function loginAction(Request $request)
     {
-        return new JsonResponse(['logged' => null !== $request->headers->get('Content-Type')?'yes':'no']);
+        // return new JsonResponse(['logged' => null !== $request->headers->get('Content-Type')?'yes':'no']);
+        return new Response();
     }
 
     public function checkAction()

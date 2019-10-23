@@ -102,6 +102,9 @@
     "friendsofsymfony/user-bundle": {
         "version": "v2.1.2"
     },
+    "gesdinet/jwt-refresh-token-bundle": {
+        "version": "v0.8.2"
+    },
     "guzzlehttp/guzzle": {
         "version": "6.3.3"
     },

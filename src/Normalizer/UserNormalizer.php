@@ -6,22 +6,43 @@ use mysql_xdevapi\Collection;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use App\Entity\User;
-use App\Services\CategoryService;
+use App\Repository\CategoryRepository;
+use App\Repository\SubcategoryRepository;
 
 class UserNormalizer implements NormalizerInterface
 {
 
     private $container;
-    private $categoryService;
+    private $categoryRepository;
+    private $subcategoryRepository;
 
-    public function __construct(ContainerInterface $container, CategoryService $categoryService)
+    public function __construct(ContainerInterface $container, CategoryRepository $categoryRepository, SubcategoryRepository $subcategoryRepository)
     {
         $this->container = $container;
-        $this->categoryService = $categoryService;
+        $this->categoryRepository = $categoryRepository;
+        $this->subcategoryRepository = $subcategoryRepository;
     }
 
     public function normalize($object, $format = null, array $context = []): array
     {
+        $categories = $this->categoryRepository->findByUser(['user' => $object->getId()]);
+
+        $categoryIds = [];
+        foreach ($categories as $cat){
+            $categoryIds[] = $cat->getId();
+        }
+
+        $presubcategories = $this->subcategoryRepository->findByUser(['user' => $object->getId()]);
+
+        $subcategories = [];
+        foreach ($presubcategories as $sub){
+            $subcategories[] = [
+                'id' => $sub->getId(),
+                'category' => $sub->getCategory()->getId(),
+                'percentage' => $object->getPercentages()[$sub->getId()]
+            ];
+        }
+
         return [
             'id' => $object->getId(),
             'email' => $object->getEmail(),
@@ -31,7 +52,8 @@ class UserNormalizer implements NormalizerInterface
             'birthday' => $object->getBirthday(),
             'location' => $object->getLocation(),
             'messenger' => $object->getMessenger(),
-            // 'categories' => $this->categoryService->findByUser($object->getId())
+            'categories' => $categoryIds,
+            'subcategories' => $subcategories,
         ];
     }
 

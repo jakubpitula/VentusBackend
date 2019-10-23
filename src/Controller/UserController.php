@@ -12,6 +12,7 @@ use App\Services\UserService;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use FOS\UserBundle\Model\UserManagerInterface;
 use App\Repository\CategoryRepository;
+use App\Repository\SubcategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Category;
 
@@ -22,14 +23,16 @@ class UserController extends AbstractController
     private $userManager;
     private $em;
     private $categoryRepository;
+    private $subcategoryRepository;
 
-    public function __construct(EntityManagerInterface $em, UserService $userService, TokenStorageInterface $tokenStorage, CategoryRepository $categoryRepository, UserManagerInterface $userManager)
+    public function __construct(SubcategoryRepository $subcategoryRepository, EntityManagerInterface $em, UserService $userService, TokenStorageInterface $tokenStorage, CategoryRepository $categoryRepository, UserManagerInterface $userManager)
     {
         $this->userService = $userService;
         $this->tokenStorage = $tokenStorage;
         $this->userManager = $userManager;
         $this->em = $em;
         $this->categoryRepository = $categoryRepository;
+        $this->subcategoryRepository = $subcategoryRepository;
     }
 
     /**
@@ -137,31 +140,37 @@ class UserController extends AbstractController
     /**
      * @Route("/api/user/subcategory/new", name="api_user_subcategory_new", methods={"POST"})
      */
-    // public function newSubcategory(Request $request)
-    // {
-    //     $data = json_decode($request->getContent(), true);
-    //     dd($data);
+    public function newSubcategory(Request $request)
+    {
+        $data = json_decode($request->getContent(), true);
 
-    //     $user = $this->tokenStorage->getToken()->getUser();
+        $user = $this->tokenStorage->getToken()->getUser();
 
-    //     if(!property_exists($user, 'id')){
-    //         $response = new JsonResponse($data,405);
+        if(!property_exists($user, 'id')){
+            $response = new JsonResponse($data,405);
 
-    //         return $response;
-    //     }
+            return $response;
+        }
 
-    //     $isCategorySet = false;
-    //     foreach ($user->getCategories() as $cat){
-    //         if($cat === $category) $isCategorySet = true;
-    //     }
-    //     if(!$isCategorySet) $user->setPercentages([$data['category'] => $data['percentage']]);
-    //     $user->addCategory($category);
+        $sub = $data['subcategory'];
 
-    //     $this->em->persist($user);
-    //     $this->em->flush();
+        $isSubSet = false;
+        foreach($user->getSubcategories() as $subcat){
+            if($subcat->getId() === $sub) $isSubSet = true;
+        }
 
-    //     return new JsonResponse([], 200);
-    // }
+        if(null!==$this->subcategoryRepository->findOneBy(['id' => $sub])){
+            $user->addSubcategory($this->subcategoryRepository->findOneBy(['id' => $sub]));
+            if(!$isSubSet) $user->setPercentages($data['subcategory'], $data['percentage']);
+        }
+        else return new JsonResponse(['error' => "Subcategory doesn't exist"], 418);
+
+
+        $this->em->persist($user);
+        $this->em->flush();
+
+        return new JsonResponse([], 200);
+    }
 
     public function __toString() {
         return '';

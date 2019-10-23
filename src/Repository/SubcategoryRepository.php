@@ -33,7 +33,14 @@ class SubcategoryRepository extends ServiceEntityRepository
         ;
     }
     
-
+    public function findByUser($user)
+    {
+        return $this->createQueryBuilder('s')
+            ->innerJoin('s.users', 'u')
+            ->where('u.id = :user')
+            ->setParameter('user', $user['user'])
+            ->getQuery()->getResult();
+    }
     /*
     public function findOneBySomeField($value): ?Subcategory
     {

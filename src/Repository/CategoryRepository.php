@@ -19,6 +19,14 @@ class CategoryRepository extends ServiceEntityRepository
         parent::__construct($registry, Category::class);
     }
 
+    public function findByUser($user)
+    {
+        return $this->createQueryBuilder('c')
+            ->innerJoin('c.users', 'u')
+            ->where('u.id = :user')
+            ->setParameter('user', $user['user'])
+            ->getQuery()->getResult();
+    }
     // /**
     //  * @return Category[] Returns an array of Category objects
     //  */

@@ -39,7 +39,7 @@ class UserController extends AbstractController
         $user = $this->tokenStorage->getToken()->getUser();
 
         if(!property_exists($user, 'id')){
-            $response = new JsonResponse($data,$status);
+            $response = new JsonResponse($data,405);
 
             return $response;
         }

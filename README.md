@@ -19,6 +19,7 @@ i ```'password'```. W przypadku pomyślnej autentykacji zwrócony zostanie statu
 /api/check_email
 ```
 
+
 W requeście POST przesłać ```'email'```.
 Jeśli email jest w bazie, zwracane jest ```'status': 'login'.```
 Jeśli nie ma - ```'status': 'register'```

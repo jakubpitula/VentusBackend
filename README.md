@@ -7,11 +7,11 @@ url: ventusapi.herokuapp.com
 ## 1. Login:
 
 ```
-/api/login
+/api/login_check
 ```
 
-Przesyłając POST request pod /login trzeba dodać header ```'Content-Type': 'application/json'``` . W JSON'ie przesłać ```'email'```
-i ```'password'```. W przypadku pomyślnej autentykacji zwrócony zostanie status 200, a w przypadku niepomyślnej - 401 i message error.
+Przesyłając POST request pod /login trzeba dodać header ```'Content-Type': 'application/json'``` . W JSON'ie przesłać ```'username'``` (de facto email)
+i ```'password'```. W przypadku pomyślnej autentykacji zwrócony zostanie status 200 oraz token, a w przypadku niepomyślnej - 401 i message error.
 
 ## 2. Sprawdzanie maila:
 
@@ -42,6 +42,7 @@ W przypadku błędu walidacji zwracane jest 401 i 'error': 'wiadomość o błęd
 /api/user
 ```
 
+W requeście konieczny header z JWT - Authorization: Bearer {token}
 Nie podawać żadnych danych w requeście.
 ```'picture'``` zawiera nazwę pliku. Ścieżka do plików:``` public/images/pictures```
 

@@ -133,7 +133,7 @@ class User extends BaseUser
 
     public function setPercentages(?array $percentages): self
     {
-        $this->percentages = $percentages;
+        $this->percentages[] = $percentages;
 
         return $this;
     }

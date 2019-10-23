@@ -67,4 +67,9 @@ class CategoryService
         }
         return empty($normalized) ? $normalized : $normalized[0];
     }
+
+    // public function findAllByUser($user)
+    // {
+    //     $data = $this->categoryRepository->findBy
+    // }
 }

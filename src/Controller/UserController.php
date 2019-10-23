@@ -11,18 +11,25 @@ use Symfony\Component\Routing\Annotation\Route;;
 use App\Services\UserService;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use FOS\UserBundle\Model\UserManagerInterface;
+use App\Repository\CategoryRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use App\Entity\Category;
 
 class UserController extends AbstractController
 {
     private $userService;
     private $tokenStorage;
     private $userManager;
+    private $em;
+    private $categoryRepository;
 
-    public function __construct(UserService $userService, TokenStorageInterface $tokenStorage, UserManagerInterface $userManager)
+    public function __construct(EntityManagerInterface $em, UserService $userService, TokenStorageInterface $tokenStorage, CategoryRepository $categoryRepository, UserManagerInterface $userManager)
     {
         $this->userService = $userService;
         $this->tokenStorage = $tokenStorage;
         $this->userManager = $userManager;
+        $this->em = $em;
+        $this->categoryRepository = $categoryRepository;
     }
 
     /**
@@ -88,7 +95,8 @@ class UserController extends AbstractController
     /**
      * @Route("/api/check_email", name="email_check", methods={"POST", "GET"})
      */
-    public function checkEmail(Request $request){
+    public function checkEmail(Request $request)
+    {
         $data = $this->userManager->findUserByEmail($request->request->get('email'));
         if($data === null){
             $response = ['status' => 'register'];
@@ -96,5 +104,66 @@ class UserController extends AbstractController
         else $response = ['status' => 'login'];
         
         return new JsonResponse($response);
+    }
+
+    /**
+     * @Route("/api/user/category/new", name="api_user_category_new", methods={"POST"})
+     */
+    public function newCategory(Request $request)
+    {
+        $data = json_decode($request->getContent(), true);
+
+        $user = $this->tokenStorage->getToken()->getUser();
+
+        if(!property_exists($user, 'id')){
+            $response = new JsonResponse($data,405);
+
+            return $response;
+        }
+
+        foreach($data as $cat){
+            if(null!==$this->categoryRepository->findOneBy(['id' => $cat])){
+                $user->addCategory($this->categoryRepository->findOneBy(['id' => $cat]));
+            }
+            else return new JsonResponse(['error' => "Category doesn't exist"], 418);
+        }
+
+        $this->em->persist($user);
+        $this->em->flush();
+
+        return new JsonResponse([], 200);
+    }
+
+    /**
+     * @Route("/api/user/subcategory/new", name="api_user_subcategory_new", methods={"POST"})
+     */
+    // public function newSubcategory(Request $request)
+    // {
+    //     $data = json_decode($request->getContent(), true);
+    //     dd($data);
+
+    //     $user = $this->tokenStorage->getToken()->getUser();
+
+    //     if(!property_exists($user, 'id')){
+    //         $response = new JsonResponse($data,405);
+
+    //         return $response;
+    //     }
+
+    //     $isCategorySet = false;
+    //     foreach ($user->getCategories() as $cat){
+    //         if($cat === $category) $isCategorySet = true;
+    //     }
+    //     if(!$isCategorySet) $user->setPercentages([$data['category'] => $data['percentage']]);
+    //     $user->addCategory($category);
+
+    //     $this->em->persist($user);
+    //     $this->em->flush();
+
+    //     return new JsonResponse([], 200);
+    // }
+
+    public function __toString() {
+        return '';
     }
 }

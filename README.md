@@ -121,3 +121,11 @@ W requeście post przesłać `name` - nazwę podkategorii i `category` - id kate
 W przypadku niepodania którejś z tych danych zwrócony zostanie status 400 i error message.
 W przypadku podania id kategorii, której nie ma w bazie, zwrócony zostanie status 418.
 Jeśli wszystko potoczy się pomyślnie, zwrócone zostanie 201.
+
+### 10. Rekomendacje:
+#### 10.1. Rekomendowane podkategorie:
+
+```
+/api/user/recommended_subcategories
+```
+Request POST. Zwraca listę podkategorii przypisanych do kategorii zalogowanego usera posortowaną według ich popularności.

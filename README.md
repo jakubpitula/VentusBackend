@@ -38,7 +38,7 @@ Niewymagane, ale zalecane: ```'picture'```. ```'picture'``` jest typem File. Res
 Zwracany jest pusty status 200, jeśli udało się zarejestrować.
 W przypadku błędu walidacji zwracane jest 400 i 'error': 'wiadomość o błędzie'.
 
-## 4.1 Zwracanie danych akualnie zalogowanego użytkownika:
+### 4.1 Zwracanie danych akualnie zalogowanego użytkownika:
 
 ```
 /api/user
@@ -56,7 +56,7 @@ Nie podawać żadnych danych w requeście.
 
 W requeście GET podać ```'id'``` użytkownika, którego chcemy sprawdzić.
 
-### 5. Odświeżanie tokenu JWT:
+## 5. Odświeżanie tokenu JWT:
 
 ```
 /api/token/refresh
@@ -64,23 +64,23 @@ W requeście GET podać ```'id'``` użytkownika, którego chcemy sprawdzić.
 
 W requeście POST form data podać ```'refresh_token'``` wygenerowany poprzednio po zalogowaniu. Wygenerowany zostanie nowy JWT dla usera.
 
-### 6. Kategorie:
-#### 6.1. Lista wszystkich kategorii:
+## 6. Kategorie:
+### 6.1. Lista wszystkich kategorii:
 
 ```
 /api/category
 ```
-#### 6.2. Kategoria wg id:
+### 6.2. Kategoria wg id:
 
 ```
 /api/category/{id}
 ```
-#### 6.3. Podkategorie danej kategorii:
+### 6.3. Podkategorie danej kategorii:
 
 ```
 /api/category/{id}/subcategories
 ```
-#### 6.4. Tworzenie nowej kategorii:
+### 6.4. Tworzenie nowej kategorii:
 
 ```
 /api/category/new
@@ -89,7 +89,7 @@ W POST requeście form-data wysłać ```'name'```.
 W przypadku niewysłania zwrócony zostanie status 400 i error message.
 Jeśli wszystko potoczy się pomyślnie, zwrócone zostanie 201.
 
-### 7. Dodawanie kategori do zalogowanego usera:
+## 7. Dodawanie kategori do zalogowanego usera:
 
 ```
 /api/user/category/new
@@ -97,7 +97,7 @@ Jeśli wszystko potoczy się pomyślnie, zwrócone zostanie 201.
 W requeście POST dodać JSONem tablicę id kategorii, które chcemy dodać, np. ```[1,2,3]```. 
 W przypadku niepomyślnej autentykacji zwrócone zostanie 405. Jeśli będzie się próbowało dodać kategorię, która nie istnieje, zwrócone zostanie 418. Jeśli wszystko potoczy się pomyślnie, zwrócone zostanie 200.
 
-### 8. Dodawanie podkategorii do zalogowanego usera:
+## 8. Dodawanie podkategorii do zalogowanego usera:
 
 ```
 /api/user/subcategory/new
@@ -111,8 +111,8 @@ W requeście POST dodać JSONem id kategorii, którą chcemy dodać oraz procent
 ```
 W przypadku niepomyślnej autentykacji zwrócone zostanie 405. Jeśli będzie się próbowało dodać kategorię, która nie istnieje, zwrócone zostanie 418. Jeśli wszystko potoczy się pomyślnie, zwrócone zostanie 200.
 
-### 9. Podkategorie:
-#### 9.1. Tworzenie nowej podkategorii:
+## 9. Podkategorie:
+### 9.1. Tworzenie nowej podkategorii:
 
 ```
 /api/subcategory/new
@@ -122,8 +122,8 @@ W przypadku niepodania którejś z tych danych zwrócony zostanie status 400 i e
 W przypadku podania id kategorii, której nie ma w bazie, zwrócony zostanie status 418.
 Jeśli wszystko potoczy się pomyślnie, zwrócone zostanie 201.
 
-### 10. Rekomendacje:
-#### 10.1. Rekomendowane podkategorie:
+## 10. Rekomendacje:
+### 10.1. Rekomendowane podkategorie:
 
 ```
 /api/user/recommended_subcategories

@@ -161,7 +161,7 @@ class UserController extends AbstractController
 
         if(null!==$this->subcategoryRepository->findOneBy(['id' => $sub])){
             $user->addSubcategory($this->subcategoryRepository->findOneBy(['id' => $sub]));
-            if(!$isSubSet) $user->setPercentages($data['subcategory'], $data['percentage']);
+            if(!$isSubSet) $user->setPercentages($data['subcategory'], intval($data['percentage']));
         }
         else return new JsonResponse(['error' => "Subcategory doesn't exist"], 418);
 

@@ -13,6 +13,7 @@
         "league/oauth2-facebook": "^2.0",
         "lexik/jwt-authentication-bundle": "^2.6",
         "nelmio/cors-bundle": "^1.5",
+        "php-ai/php-ml": "^0.8.0",
         "sensio/framework-extra-bundle": "^5.4",
         "symfony/apache-pack": "^1.0",
         "symfony/asset": "4.3.*",

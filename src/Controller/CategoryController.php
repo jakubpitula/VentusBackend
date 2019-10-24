@@ -107,7 +107,7 @@ class CategoryController extends AbstractController
 
         $category = new Category();
 
-        if(!isset($data['name'])) return new JsonResponse(['error' => 'Name not set'], 401);
+        if(!isset($data['name'])) return new JsonResponse(['error' => 'Name not set'], 400);
 
         $category->setName($data['name']);
 

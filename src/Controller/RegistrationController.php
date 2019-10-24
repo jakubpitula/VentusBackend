@@ -66,19 +66,19 @@ class RegistrationController extends BaseController
         
         $isEmailUnique = isset($data['email']) ? $this->userManager->findUserByEmail($data['email']) : null;
 
-        if(!isset($data['password'])) return new JsonResponse(['error' => 'Password not set'], 401);
-        if(!isset($data['email'])) return new JsonResponse(['error' => 'Email not set'], 401);
-        if(!isset($data['gender'])) return new JsonResponse(['error' => 'Gender not set'], 401);
-        if(!isset($data['location'])) return new JsonResponse(['error' => 'Location not set'], 401);
-        if(!isset($data['first_name'])) return new JsonResponse(['error' => 'First_name not set'], 401);
-        if(!isset($data['birthday'])) return new JsonResponse(['error' => 'Birthday not set'], 401);
-        if(!isset($data['messenger'])) return new JsonResponse(['error' => 'Messenger not set'], 401);
+        if(!isset($data['password'])) return new JsonResponse(['error' => 'Password not set'], 400);
+        if(!isset($data['email'])) return new JsonResponse(['error' => 'Email not set'], 400);
+        if(!isset($data['gender'])) return new JsonResponse(['error' => 'Gender not set'], 400);
+        if(!isset($data['location'])) return new JsonResponse(['error' => 'Location not set'], 400);
+        if(!isset($data['first_name'])) return new JsonResponse(['error' => 'First_name not set'], 400);
+        if(!isset($data['birthday'])) return new JsonResponse(['error' => 'Birthday not set'], 400);
+        if(!isset($data['messenger'])) return new JsonResponse(['error' => 'Messenger not set'], 400);
 
-        if(strlen($data['password']) < 8) return new JsonResponse(['error' => 'Password too short'], 401); 
-        if(!filter_var($data['messenger'], FILTER_VALIDATE_URL)) return new JsonResponse(['error' => 'Invalid link'], 401);
-        if(!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) return new JsonResponse(['error' => 'Invalid email'], 401);
+        if(strlen($data['password']) < 8) return new JsonResponse(['error' => 'Password too short'], 400); 
+        if(!filter_var($data['messenger'], FILTER_VALIDATE_URL)) return new JsonResponse(['error' => 'Invalid link'], 400);
+        if(!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) return new JsonResponse(['error' => 'Invalid email'], 400);
 
-        if($isEmailUnique!==null) return new JsonResponse(['error' => 'Email already exists'], 401);
+        if($isEmailUnique!==null) return new JsonResponse(['error' => 'Email already exists'], 400);
 
         $user->setFirstName($data['first_name']);
         $user->setEmail($data['email']);

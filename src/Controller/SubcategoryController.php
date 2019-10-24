@@ -10,43 +10,57 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Console\Output\ConsoleOutput;
+use App\Repository\CategoryRepository;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * @Route("/api/subcategory")
  */
 class SubcategoryController extends AbstractController
 {
-    /**
-     * @Route("/", name="subcategory_index", methods={"GET"})
-     */
-    public function index(SubcategoryRepository $subcategoryRepository): Response
+    private $subcategoryRepository;
+    private $em;
+
+    public function __construct(CategoryRepository $categoryRepository, EntityManagerInterface $em)
     {
-        return $this->render('subcategory/index.html.twig', [
-            'subcategories' => $subcategoryRepository->findAll(),
-        ]);
+        $this->categoryRepository = $categoryRepository;
+        $this->em = $em;
     }
 
     /**
-     * @Route("/new", name="subcategory_new", methods={"GET","POST"})
+     * @Route("/", name="subcategory_index", methods={"GET"})
+     */
+    // public function index(SubcategoryRepository $subcategoryRepository): Response
+    // {
+    //     return $this->render('subcategory/index.html.twig', [
+    //         'subcategories' => $subcategoryRepository->findAll(),
+    //     ]);
+    // }
+
+    /**
+     * @Route("/new", name="subcategory_new", methods={"POST"})
      */
     public function new(Request $request): Response
     {
+        $data = $request->request->all();
+
         $subcategory = new Subcategory();
-        $form = $this->createForm(SubcategoryType::class, $subcategory);
-        $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($subcategory);
-            $entityManager->flush();
+        if(!isset($data['name'])) return new JsonResponse(['error' => 'Name not set'], 400);
+        if(!isset($data['category'])) return new JsonResponse(['error' => 'Category not set'], 400);
 
-            return $this->redirectToRoute('subcategory_index');
-        }
+        $category = $this->categoryRepository->findOneBy(['id' => $data['category']]);
 
-        return $this->render('subcategory/new.html.twig', [
-            'subcategory' => $subcategory,
-            'form' => $form->createView(),
-        ]);
+        if($category !== null) $subcategory->setCategory($category);
+        else return new JsonResponse(['error' => "Category doesn't exist"], 418);
+
+        $subcategory->setName($data['name']);
+
+        $this->em->persist($subcategory);
+        $this->em->flush();
+
+        return new JsonResponse([], 201);
     }
 
     /**

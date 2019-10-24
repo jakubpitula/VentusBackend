@@ -34,7 +34,7 @@ Wymagane dane w requeście POST: ```'password', 'email', 'gender', 'location', '
 Niewymagane, ale zalecane: ```'picture'```. ```'picture'``` jest typem File. Reszta to typ string.
 
 Zwracany jest pusty status 200, jeśli udało się zarejestrować.
-W przypadku błędu walidacji zwracane jest 401 i 'error': 'wiadomość o błędzie'.
+W przypadku błędu walidacji zwracane jest 400 i 'error': 'wiadomość o błędzie'.
 
 ## 4.1 Zwracanie danych akualnie zalogowanego użytkownika:
 

@@ -39,7 +39,22 @@ class SubcategoryRepository extends ServiceEntityRepository
             ->innerJoin('s.users', 'u')
             ->where('u.id = :user')
             ->setParameter('user', $user['user'])
-            ->getQuery()->getResult();
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findByUserAndCategory($user, $cat)
+    {
+        return $this->createQueryBuilder('s')
+            ->innerJoin('s.users', 'u')
+            ->where('u.id = :user')
+            ->andWhere('s.category = :cat')
+            ->setParameter('user', $user)
+            ->setParameter('cat', $cat)
+            ->getQuery()
+            ->getResult()
+        ;
     }
     /*
     public function findOneBySomeField($value): ?Subcategory

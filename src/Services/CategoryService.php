@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Normalizer\CategoryNormalizer;
 use App\Repository\CategoryRepository;
+use App\Normalizer\CategoryIndexNormalizer;
 
 class CategoryService
 {
@@ -18,14 +19,20 @@ class CategoryService
     private $categoryNormalizer;
 
     /**
+     * @var php
+     */
+    private $categoryIndexNormalizer;
+
+    /**
      * categoryService constructor.
      * @param CategoryRepository $categoryRepository
      * @param php $normalizer
      */
-    public function __construct(CategoryRepository $categoryRepository, CategoryNormalizer $normalizer)
+    public function __construct(CategoryRepository $categoryRepository, CategoryNormalizer $normalizer, CategoryIndexNormalizer $categoryIndexNormalizer)
     {
         $this->categoryRepository = $categoryRepository;
         $this->categoryNormalizer = $normalizer;
+        $this->categoryIndexNormalizer = $categoryIndexNormalizer;
     }
 
     /**
@@ -51,7 +58,7 @@ class CategoryService
         $normalized = [];
 
         foreach ($data as $d) {
-            $normalized[] = $this->categoryNormalizer->normalize($d);
+            $normalized[] = $this->categoryIndexNormalizer->normalize($d);
         }
 
         return $normalized;

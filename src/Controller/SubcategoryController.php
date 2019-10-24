@@ -13,6 +13,7 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 use App\Repository\CategoryRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Services\SubcategoryService;
 
 /**
  * @Route("/api/subcategory")
@@ -21,11 +22,13 @@ class SubcategoryController extends AbstractController
 {
     private $subcategoryRepository;
     private $em;
+    private $subcategoryService;
 
-    public function __construct(CategoryRepository $categoryRepository, EntityManagerInterface $em)
+    public function __construct(CategoryRepository $categoryRepository, EntityManagerInterface $em, SubcategoryService $subcategoryService)
     {
         $this->categoryRepository = $categoryRepository;
         $this->em = $em;
+        $this->subcategoryService = $subcategoryService;
     }
 
     /**
@@ -49,6 +52,9 @@ class SubcategoryController extends AbstractController
 
         if(!isset($data['name'])) return new JsonResponse(['error' => 'Name not set'], 400);
         if(!isset($data['category'])) return new JsonResponse(['error' => 'Category not set'], 400);
+
+        $isNameUnique = $this->subcategoryService->findByName($data['name']);
+        if($isNameUnique != null) return new JsonResponse(['error' => 'Subcategory name already in use'], 400);
 
         $category = $this->categoryRepository->findOneBy(['id' => $data['category']]);
 

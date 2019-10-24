@@ -108,6 +108,9 @@ class CategoryController extends AbstractController
         $category = new Category();
 
         if(!isset($data['name'])) return new JsonResponse(['error' => 'Name not set'], 400);
+        
+        $isNameUnique = $this->categoryService->findByName($data['name']);
+        if($isNameUnique != null) return new JsonResponse(['error' => 'Category name already in use'], 400);
 
         $category->setName($data['name']);
 

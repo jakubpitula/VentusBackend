@@ -75,6 +75,17 @@ class CategoryService
         return empty($normalized) ? $normalized : $normalized[0];
     }
 
+    public function findByName(?string $name)
+    {
+        $data = $this->categoryRepository->findBy(['name' =>  $name]);
+        $normalized = [];
+
+        foreach ($data as $d) {
+            $normalized[] = $this->categoryNormalizer->normalize($d);
+        }
+        return empty($normalized) ? $normalized : $normalized[0];
+    }
+
     // public function findAllByUser($user)
     // {
     //     $data = $this->categoryRepository->findBy

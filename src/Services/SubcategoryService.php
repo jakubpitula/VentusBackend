@@ -56,4 +56,15 @@ class SubcategoryService
 
         return $normalized;
     }
+
+    public function findByName(?string $name)
+    {
+        $data = $this->subcategoryRepository->findBy(['name' =>  $name]);
+        $normalized = [];
+
+        foreach ($data as $d) {
+            $normalized[] = $this->subcategoryNormalizer->normalize($d);
+        }
+        return empty($normalized) ? $normalized : $normalized[0];
+    }
 }

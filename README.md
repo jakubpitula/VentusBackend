@@ -4,6 +4,8 @@
 url: ventusapi.herokuapp.com
 ```
 
+### WAŻNE: WE WSZYSTKICH REQUESTACH DO ŚCIEŻEK ZACZYNAJĄCYCJ SIĘ OD ```/api/user``` DODAĆ HEADER Z JWT - ```Authorization: Bearer {token}```, TRZEBA BYĆ DO NICH ZALOGOWANYM.
+
 ## 1. Login:
 
 ```
@@ -63,5 +65,46 @@ W requeście GET podać ```'id'``` użytkownika, którego chcemy sprawdzić.
 W requeście POST form data podać ```'refresh_token'``` wygenerowany poprzednio po zalogowaniu. Wygenerowany zostanie nowy JWT dla usera.
 
 ### 6. Kategorie:
+#### 6.1. Lista wszystkich kategorii:
 
-jutro dokumentacja, ale są
+```
+/api/category
+```
+#### 6.2. Kategoria wg id:
+
+```
+/api/category/{id}
+```
+#### 6.3. Podkategorie danej kategorii:
+
+```
+/api/category/{id}/subcategories
+```
+#### 6.4. Tworzenie nowej kategorii:
+
+```
+/api/category/new
+```
+W POST requeście form-data wysłać ```'name'```.
+
+### 7. Dodawanie kategori do zalogowanego usera:
+
+```
+/api/user/category/new
+```
+W requeście POST dodać JSONem tablicę id kategorii, które chcemy dodać, np. ```[1,2,3]```. 
+W przypadku niepomyślnej autentykacji zwrócone zostanie 405. Jeśli będzie się próbowało dodać kategorię, która nie istnieje, zwrócone zostanie 418. Jeśli wszystko potoczy się pomyślnie, zwrócone zostanie 200.
+
+### 8. Dodawanie podkategorii do zalogowanego usera:
+
+```
+/api/user/subcategory/new
+```
+W requeście POST dodać JSONem id kategorii, którą chcemy dodać oraz procent wybrany przez usera, w formacie
+```
+{
+	"subcategory": 1,
+	"percentage": 100
+}
+```
+W przypadku niepomyślnej autentykacji zwrócone zostanie 405. Jeśli będzie się próbowało dodać kategorię, która nie istnieje, zwrócone zostanie 418. Jeśli wszystko potoczy się pomyślnie, zwrócone zostanie 200.

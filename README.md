@@ -86,6 +86,8 @@ W requeście POST form data podać ```'refresh_token'``` wygenerowany poprzednio
 /api/category/new
 ```
 W POST requeście form-data wysłać ```'name'```.
+W przypadku niewysłania zwrócony zostanie status 400 i error message.
+Jeśli wszystko potoczy się pomyślnie, zwrócone zostanie 201.
 
 ### 7. Dodawanie kategori do zalogowanego usera:
 
@@ -108,3 +110,14 @@ W requeście POST dodać JSONem id kategorii, którą chcemy dodać oraz procent
 }
 ```
 W przypadku niepomyślnej autentykacji zwrócone zostanie 405. Jeśli będzie się próbowało dodać kategorię, która nie istnieje, zwrócone zostanie 418. Jeśli wszystko potoczy się pomyślnie, zwrócone zostanie 200.
+
+### 9. Podkategorie:
+#### 9.1. Tworzenie nowej podkategorii:
+
+```
+/api/subcategory/new
+```
+W requeście post przesłać `name` - nazwę podkategorii i `category` - id kategorii, pod którą ma się ona znajdować.
+W przypadku niepodania którejś z tych danych zwrócony zostanie status 400 i error message.
+W przypadku podania id kategorii, której nie ma w bazie, zwrócony zostanie status 418.
+Jeśli wszystko potoczy się pomyślnie, zwrócone zostanie 201.

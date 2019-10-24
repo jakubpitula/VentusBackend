@@ -17,7 +17,7 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
- * @Route("/api/category")
+ * @Route("/api/category", schemes={"https"})
  */
 class CategoryController extends AbstractController
 {

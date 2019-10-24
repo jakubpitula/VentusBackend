@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
 /**
- * @Route("/api/subcategory")
+ * @Route("/api/subcategory", schemes={"https"})
  */
 class SubcategoryController extends AbstractController
 {

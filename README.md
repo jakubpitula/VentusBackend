@@ -61,3 +61,7 @@ W requeście GET podać ```'id'``` użytkownika, którego chcemy sprawdzić.
 ```
 
 W requeście POST form data podać ```'refresh_token'``` wygenerowany poprzednio po zalogowaniu. Wygenerowany zostanie nowy JWT dla usera.
+
+### 6. Kategorie:
+
+jutro dokumentacja, ale są

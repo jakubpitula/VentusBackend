@@ -170,7 +170,7 @@ class UserController extends AbstractController
 
         $response = [
             'id' => $friend->getId(),
-            'picture' => 'https://ventusapi.s3.amazonaws.com/pictures/'.$object->getPictureName(),
+            'picture' => 'https://ventusapi.s3.amazonaws.com/pictures/'.$friend->getPictureName(),
             'name' => $friend->getFirstName(),
             'location' => $friend->getLocation(),
             'birthday' => $friend->getBirthday(),

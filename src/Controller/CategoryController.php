@@ -120,27 +120,6 @@ class CategoryController extends AbstractController
         return new JsonResponse([], 201);
     }
 
-
-    /**
-     * @Route("/{id}/edit", name="category_edit", methods={"GET","POST"})
-     */
-    public function edit(Request $request, Category $category): Response
-    {
-        $form = $this->createForm(CategoryType::class, $category);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('category_index');
-        }
-
-        return $this->render('category/edit.html.twig', [
-            'category' => $category,
-            'form' => $form->createView(),
-        ]);
-    }
-
     /**
      * @Route("/{id}", name="category_delete", methods={"DELETE"})
      */

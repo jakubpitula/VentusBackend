@@ -80,26 +80,6 @@ class SubcategoryController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="subcategory_edit", methods={"GET","POST"})
-     */
-    public function edit(Request $request, Subcategory $subcategory): Response
-    {
-        $form = $this->createForm(SubcategoryType::class, $subcategory);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('subcategory_index');
-        }
-
-        return $this->render('subcategory/edit.html.twig', [
-            'subcategory' => $subcategory,
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
      * @Route("/{id}", name="subcategory_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Subcategory $subcategory): Response

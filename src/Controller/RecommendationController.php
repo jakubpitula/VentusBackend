@@ -128,7 +128,7 @@ class RecommendationController extends AbstractController
                 'id' => $friend->getId(),
                 'name' => $friend->getFirstName(),
                 'location' => $friend->getLocation(),
-                'picture' => 'https://ventusapi.s3.amazonaws.com/pictures/'.$friend->getPictureName(),
+                'picture' => $friend->getPictureName() !== null ? 'https://ventusapi.s3.amazonaws.com/pictures/'.$friend->getPictureName() : null,
                 'match' => intval($recommendation),
                 'top' => $topSubcategories
             ];

@@ -64,7 +64,6 @@ class UserController extends AbstractController
 
         try {
             $data = $this->userService->findAllById($id);
-
         } catch (\Exception $exception) {
             $status = JsonResponse::HTTP_NO_CONTENT;
             $output = new ConsoleOutput();
@@ -87,6 +86,8 @@ class UserController extends AbstractController
         if(null === $this->userManager->findUserBy(['id' => $id])){
             return new JsonResponse(['error' => "User doesn't exist"], 400);
         }
+
+        $friend = $this->userManager->findUserBy(['id' => $id]);
         
         $user = $this->tokenStorage->getToken()->getUser();
 

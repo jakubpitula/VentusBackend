@@ -1,0 +1,14 @@
+knp_gaufrette:
+    stream_wrapper: ~
+    adapters:
+        pictures_adapter:
+            aws_s3:
+                service_id: ct_file_store.s3
+                bucket_name: '%env(AWS_BUCKET_NAME)%'
+                detect_content_type: true
+                options:
+                    create: true
+                    directory: pictures
+    filesystems:
+        pictures_fs:
+            adapter:    pictures_adapter

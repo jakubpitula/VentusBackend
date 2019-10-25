@@ -16,6 +16,7 @@ use App\Repository\SubcategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Category;
 use App\Services\SubcategoryService;
+use Aws\S3\S3Client;
 
 class UserController extends AbstractController
 {
@@ -26,8 +27,9 @@ class UserController extends AbstractController
     private $categoryRepository;
     private $subcategoryRepository;
     private $subcategoryService;
+    private $s3Client;
 
-    public function __construct(SubcategoryService $subcategoryService, SubcategoryRepository $subcategoryRepository, EntityManagerInterface $em, UserService $userService, TokenStorageInterface $tokenStorage, CategoryRepository $categoryRepository, UserManagerInterface $userManager)
+    public function __construct(S3Client $s3Client, SubcategoryService $subcategoryService, SubcategoryRepository $subcategoryRepository, EntityManagerInterface $em, UserService $userService, TokenStorageInterface $tokenStorage, CategoryRepository $categoryRepository, UserManagerInterface $userManager)
     {
         $this->userService = $userService;
         $this->tokenStorage = $tokenStorage;
@@ -36,6 +38,7 @@ class UserController extends AbstractController
         $this->categoryRepository = $categoryRepository;
         $this->subcategoryRepository = $subcategoryRepository;
         $this->subcategoryService = $subcategoryService;
+        $this->s3Client = $s3Client;
     }
 
     /**
@@ -167,7 +170,7 @@ class UserController extends AbstractController
 
         $response = [
             'id' => $friend->getId(),
-            'picture' => $friend->getPictureName(),
+            'picture' => 'https://ventusapi.s3.amazonaws.com/pictures/'.$object->getPictureName(),
             'name' => $friend->getFirstName(),
             'location' => $friend->getLocation(),
             'birthday' => $friend->getBirthday(),

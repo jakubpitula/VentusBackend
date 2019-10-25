@@ -4,7 +4,7 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-
+    uploads_base_url: 'https://s3.amazonaws.com/%env(AWS_BUCKET_NAME)%'
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -35,3 +35,14 @@ services:
     App\Controller\RegistrationController:
         arguments:
             $formFactory: '@fos_user.registration.form.factory'
+    ct_file_store.s3:
+            class: Aws\S3\S3Client
+            factory: [Aws\S3\S3Client, 'factory']
+            arguments:
+                -
+                    version: latest
+                    region: us-east-2
+                    credentials:
+                        key: '%env(AWS_KEY)%'
+                        secret: '%env(AWS_SECRET_KEY)%'
+    Aws\S3\S3Client: '@ct_file_store.s3'

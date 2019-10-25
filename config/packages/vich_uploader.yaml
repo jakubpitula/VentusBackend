@@ -1,7 +1,10 @@
 vich_uploader:
     db_driver: orm
-
+    storage: gaufrette
     mappings:
-       pictures:
-           uri_prefix: /images/pictures
-           upload_destination: '%kernel.project_dir%/public/images/pictures'
+        pictures:
+            inject_on_load: true
+            uri_prefix: "%env(AWS_BASE_URL)%/%env(AWS_BUCKET_NAME)%/pictures"
+            upload_destination: pictures_fs
+            delete_on_update:   false
+            delete_on_remove:   false 

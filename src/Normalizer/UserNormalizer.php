@@ -48,7 +48,7 @@ class UserNormalizer implements NormalizerInterface
             'email' => $object->getEmail(),
             'first_name' => $object->getFirstName(),
             'gender' => $object->getGender(),
-            'picture' => $object->getPictureName(),
+            'picture' => 'https://ventusapi.s3.amazonaws.com/pictures/'.$object->getPictureName(),
             'birthday' => $object->getBirthday(),
             'location' => $object->getLocation(),
             'messenger' => $object->getMessenger(),

@@ -46,14 +46,18 @@ class RecommendationController extends AbstractController
      */
     public function getRecommendations(Request $request)
     {
-        $data = json_decode($request->getContent(), true);
-
         $user = $this->tokenStorage->getToken()->getUser();
 
         if(!property_exists($user, 'id')){
             $response = new JsonResponse($data,405);
 
             return $response;
+        }
+
+        $dataAll = $user->getCategories();
+        $data = [];
+        foreach ($dataAll as $d){
+            $data[] = $d->getId();
         }
 
         $mySubcategories = $this->subcategoryService->findByUserAndCategories($user, $data);
@@ -128,6 +132,10 @@ class RecommendationController extends AbstractController
                 'top' => $topSubcategories
             ];
         }
+
+        usort($recommendations, function($a, $b){
+            return $b['match'] - $a['match'];
+        });
 
         return new JsonResponse($recommendations);
     }

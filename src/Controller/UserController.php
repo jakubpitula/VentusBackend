@@ -81,21 +81,100 @@ class UserController extends AbstractController
      */
     public function getById(Request $request, $id)
     {
-        $status = JsonResponse::HTTP_OK;
-
-        $data = [];
-
         try {
-            $data = $this->userService->findAllById($id);
+            $friend = $this->userManager->findUserBy(['id' => $id]);
 
         } catch (\Exception $exception) {
             $status = JsonResponse::HTTP_NO_CONTENT;
             $output = new ConsoleOutput();
             $output->writeln($exception->getMessage());
+            return new JsonResponse([], $status);
+        }
+        $user = $this->tokenStorage->getToken()->getUser();
+
+        if(!property_exists($user, 'id')){
+            $response = new JsonResponse($data,405);
+
+            return $response;
         }
 
+        $dataAll = $user->getCategories();
+        $data = [];
+        foreach ($dataAll as $d){
+            $data[] = $d->getId();
+        }
 
-        return new JsonResponse($data, $status);
+        $mySubcategories = $this->subcategoryService->findByUserAndCategories($user, $data);
+        $myPercentages = $user->getPercentages();
+
+        $friendSubcategories = $this->subcategoryService->findByUserAndCategories($friend, $data);
+        $friendPercentages = $friend->getPercentages();
+
+        $matches = [];
+
+        foreach($mySubcategories as $my){
+            if(in_array($my, $friendSubcategories)) $matches[] = $my;
+        }
+
+        $myMatchPercent = count($matches)/count($mySubcategories)*100;
+        $friendMatchPercent = count($matches)/count($friendSubcategories)*100;
+
+        $differences = [];
+
+        foreach($matches as $match){
+            $diff = abs($myPercentages[$match->getId()] - $friendPercentages[$match->getId()]);
+            $interest = ($myPercentages[$match->getId()] + $friendPercentages[$match->getId()])/2;
+            $equalized = $interest*(100-$diff)/100;
+
+            $differences[] = [
+                'subcategory' => $match->getId(),
+                'diff' => $diff,
+                'interest' => $interest,
+                'equalized' => $equalized
+            ];
+        }
+
+        usort($differences, function($a, $b){
+            return $b['equalized'] - $a['equalized'];
+        });
+
+        $topSubcategories = [];
+        foreach(array_slice($differences, 0, 5) as $diff){
+            $topSubcategories[]=[
+                'name' => $this->subcategoryService->findAllById($diff['subcategory'])['name'],
+                'percentage' => $friendPercentages[$diff['subcategory']]
+            ];
+        }
+        
+        $matchSum = 0;
+        foreach($differences as $match){
+            $matchSum+=$match['equalized'];
+        }
+
+        $matchesEqualized = $matchSum/count($matches);
+        $matchPercent = ($myMatchPercent + $friendMatchPercent)/2;
+        $matchWeight = count($matches)/5;
+
+        $recommendation = intval(($matchesEqualized + ($matchPercent*$matchWeight))/(1+$matchWeight));
+
+        $subcategories = [];
+        foreach($matches as $match){
+            $subcategories[] = [
+                'name' => $match->getName(),
+                'percentage' => $friendPercentages[$match->getId()]
+            ];
+        }
+
+        $response = [
+            'id' => $friend->getId(),
+            'picture' => $friend->getPictureName(),
+            'name' => $friend->getFirstName(),
+            'location' => $friend->getLocation(),
+            'birthday' => $friend->getBirthday(),
+            'match' => $recommendation,
+            'subcategories' => $subcategories
+        ];
+        return new JsonResponse($response);
     }
 
     /**
@@ -158,7 +237,7 @@ class UserController extends AbstractController
         }
 
         if(!isset($data['subcategory'])) return new JsonResponse(['error' => 'No subcategory set'], 400);
-        if(!isset($data['percentage'])) return new JsonResponse(['error' => 'No percentages set'], 400);
+        if(!isset($data['percentages'])) return new JsonResponse(['error' => 'No percentages set'], 400);
 
         $sub = $data['subcategory'];
 

@@ -124,11 +124,13 @@ class RecommendationController extends AbstractController
 
             $recommendation = ($matchesEqualized + ($matchPercent*$matchWeight))/(1+$matchWeight);
 
+            $picture = $friend->getPictureName() !== null ? 'https://ventusapi.s3.amazonaws.com/pictures/'.$friend->getPictureName() : null;
+
             $recommendations[] = [
                 'id' => $friend->getId(),
                 'name' => $friend->getFirstName(),
                 'location' => $friend->getLocation(),
-                'picture' => $friend->getPictureName() !== null ? 'https://ventusapi.s3.amazonaws.com/pictures/'.$friend->getPictureName() : null,
+                'picture' => $picture,
                 'match' => intval($recommendation),
                 'top' => $topSubcategories
             ];

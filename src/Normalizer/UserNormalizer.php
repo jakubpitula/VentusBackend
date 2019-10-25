@@ -42,13 +42,14 @@ class UserNormalizer implements NormalizerInterface
                 'percentage' => $object->getPercentages()[$sub->getId()]
             ];
         }
-
+        $picture = $object->getPictureName() !== null ? 'https://ventusapi.s3.amazonaws.com/pictures/'.$object->getPictureName() : null;
+        
         return [
             'id' => $object->getId(),
             'email' => $object->getEmail(),
             'first_name' => $object->getFirstName(),
             'gender' => $object->getGender(),
-            'picture' => $friend->getPictureName() !== null ? 'https://ventusapi.s3.amazonaws.com/pictures/'.$friend->getPictureName() : null,
+            'picture' => $picture,
             'birthday' => $object->getBirthday(),
             'location' => $object->getLocation(),
             'messenger' => $object->getMessenger(),

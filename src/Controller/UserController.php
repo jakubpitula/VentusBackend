@@ -154,7 +154,6 @@ class UserController extends AbstractController
         $matchPercent = ($myMatchPercent + $friendMatchPercent)/2;
         $matchWeight = count($matches)/5;
         $recommendation = intval(($matchesEqualized + ($matchPercent*$matchWeight))/(1+$matchWeight));
-        // dd($recommendation);
 
         $subcategories = [];
         foreach($matches as $match){
@@ -164,9 +163,11 @@ class UserController extends AbstractController
             ];
         }
 
+        $picture = $friend->getPictureName() !== null ? 'https://ventusapi.s3.amazonaws.com/pictures/'.$friend->getPictureName() : null;
+
         $response = [
             'id' => $friend->getId(),
-            'picture' => $friend->getPictureName() !== null ? 'https://ventusapi.s3.amazonaws.com/pictures/'.$friend->getPictureName() : null,
+            'picture' => $picture,
             'name' => $friend->getFirstName(),
             'location' => $friend->getLocation(),
             'birthday' => $friend->getBirthday(),

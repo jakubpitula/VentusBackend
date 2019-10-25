@@ -37,6 +37,7 @@ class UserService
     public function findAllById(?int $id)
     {
         $data = $this->userRepository->findById($id);
+        
         $normalized = [];
 
         foreach ($data as $d) {

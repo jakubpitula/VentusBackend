@@ -139,7 +139,7 @@ class UserController extends AbstractController
         });
 
         $topSubcategories = [];
-        foreach(array_slice($differences, 0, 5) as $diff){
+        foreach(array_slice($differences, 0, 20) as $diff){
             $topSubcategories[]=[
                 'name' => $this->subcategoryService->findAllById($diff['subcategory'])['name'],
                 'percentage' => $friendPercentages[$diff['subcategory']]
@@ -154,8 +154,8 @@ class UserController extends AbstractController
         $matchesEqualized = $matchSum/count($matches);
         $matchPercent = ($myMatchPercent + $friendMatchPercent)/2;
         $matchWeight = count($matches)/5;
-
         $recommendation = intval(($matchesEqualized + ($matchPercent*$matchWeight))/(1+$matchWeight));
+        // dd($recommendation);
 
         $subcategories = [];
         foreach($matches as $match){

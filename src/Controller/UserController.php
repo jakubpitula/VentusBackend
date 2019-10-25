@@ -237,7 +237,7 @@ class UserController extends AbstractController
         }
 
         if(!isset($data['subcategory'])) return new JsonResponse(['error' => 'No subcategory set'], 400);
-        if(!isset($data['percentages'])) return new JsonResponse(['error' => 'No percentages set'], 400);
+        if(!isset($data['percentage'])) return new JsonResponse(['error' => 'No percentages set'], 400);
 
         $sub = $data['subcategory'];
 

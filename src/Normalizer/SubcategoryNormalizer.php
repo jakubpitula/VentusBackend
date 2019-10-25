@@ -29,7 +29,8 @@ class SubcategoryNormalizer implements NormalizerInterface
         return [
             'id' => $object->getId(),
             'name' => $object->getName(),
-            'category' => $object->getCategory()->getId()
+            'category_id' => $object->getCategory()->getId(),
+            'category_name' => $object->getCategory()->getName()
         ];
     }
 

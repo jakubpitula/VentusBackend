@@ -74,43 +74,6 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/api/user/recommendations", name="recommendations", methods={"POST", "GET"})
-     */
-    public function getRecommendations(Request $request){
-        $data = json_decode($request->getContent(), true);
-
-        $user = $this->tokenStorage->getToken()->getUser();
-
-        $subcategories = $this->subcategoryService->findByUserAndCategories($user, $data);
-        dd($subcategories);
-
-        if(!property_exists($user, 'id')){
-            $response = new JsonResponse($data,405);
-
-            return $response;
-        }
-    }
-
-    /**
-     * @Route("/api/user/recommended_subcategories", name="recommended_subcategories", methods={"POST"})
-     */
-    public function getRecommendedSubcategories()
-    {
-        $user = $this->tokenStorage->getToken()->getUser();
-
-        if(!property_exists($user, 'id')){
-            $response = new JsonResponse($data,405);
-
-            return $response;
-        }
-
-        $categories = $this->categoryRepository->findByUser(['user' => $user->getId()]);
-        $subcategories = $this->subcategoryService->findAllByCategories($categories);
-
-        return new JsonResponse($subcategories);
-    }
-
-    /**
      * @Route("/api/user/{id}", name="api_user_id")
      * @param integer $id
      * @return JsonResponse

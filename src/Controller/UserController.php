@@ -84,15 +84,10 @@ class UserController extends AbstractController
      */
     public function getById(Request $request, $id)
     {
-        try {
-            $friend = $this->userManager->findUserBy(['id' => $id]);
-
-        } catch (\Exception $exception) {
-            $status = JsonResponse::HTTP_NO_CONTENT;
-            $output = new ConsoleOutput();
-            $output->writeln($exception->getMessage());
-            return new JsonResponse([], $status);
+        if(null === $this->userManager->findUserBy(['id' => $id])){
+            return new JsonResponse(['error' => "User doesn't exist"], 400);
         }
+        
         $user = $this->tokenStorage->getToken()->getUser();
 
         if(!property_exists($user, 'id')){

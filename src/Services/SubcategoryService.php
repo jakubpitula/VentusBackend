@@ -102,7 +102,9 @@ class SubcategoryService
         foreach($cats as $cat){
             if(null != $this->subcategoryRepository->findByUserAndCategory($user, $cat)){
                 $r = $this->subcategoryRepository->findByUserAndCategory($user, $cat);
-                $res[] = $r[0];
+                foreach($r as $i){
+                    $res[] = $i;
+                }
             }
         }
 

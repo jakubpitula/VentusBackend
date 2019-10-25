@@ -127,6 +127,8 @@ class UserController extends AbstractController
             return $response;
         }
 
+        if($data === null) return new JsonResponse(['error' => 'No data in request'], 400);
+
         foreach($data as $cat){
             if(null!==$this->categoryRepository->findOneBy(['id' => $cat])){
                 $user->addCategory($this->categoryRepository->findOneBy(['id' => $cat]));
@@ -154,6 +156,9 @@ class UserController extends AbstractController
 
             return $response;
         }
+
+        if(!isset($data['subcategory'])) return new JsonResponse(['error' => 'No subcategory set'], 400);
+        if(!isset($data['percentage'])) return new JsonResponse(['error' => 'No percentages set'], 400);
 
         $sub = $data['subcategory'];
 

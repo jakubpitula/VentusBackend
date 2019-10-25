@@ -44,19 +44,92 @@ class RecommendationController extends AbstractController
     /**
      * @Route("/recommendations", name="recommendations", methods={"POST", "GET"})
      */
-    public function getRecommendations(Request $request){
+    public function getRecommendations(Request $request)
+    {
         $data = json_decode($request->getContent(), true);
 
         $user = $this->tokenStorage->getToken()->getUser();
-
-        $subcategories = $this->subcategoryService->findByUserAndCategories($user, $data);
-        dd($subcategories);
 
         if(!property_exists($user, 'id')){
             $response = new JsonResponse($data,405);
 
             return $response;
         }
+
+        $mySubcategories = $this->subcategoryService->findByUserAndCategories($user, $data);
+        $myPercentages = $user->getPercentages();
+
+        $friends = [];
+        $recommendations = [];
+
+        foreach($mySubcategories as $sub){
+            foreach($sub->getUsers() as $u){
+                if($u->getId() != $user->getId() && !in_array($u, $friends)) $friends[] = $u;
+            }
+        }
+
+        foreach($friends as $friend){
+
+            $friendSubcategories = $this->subcategoryService->findByUserAndCategories($friend, $data);
+            $friendPercentages = $friend->getPercentages();
+
+            $matches = [];
+
+            foreach($mySubcategories as $my){
+                if(in_array($my, $friendSubcategories)) $matches[] = $my;
+            }
+
+            $myMatchPercent = count($matches)/count($mySubcategories)*100;
+            $friendMatchPercent = count($matches)/count($friendSubcategories)*100;
+
+            $differences = [];
+
+            foreach($matches as $match){
+                $diff = abs($myPercentages[$match->getId()] - $friendPercentages[$match->getId()]);
+                $interest = ($myPercentages[$match->getId()] + $friendPercentages[$match->getId()])/2;
+                $equalized = $interest*(100-$diff)/100;
+
+                $differences[] = [
+                    'subcategory' => $match->getId(),
+                    'diff' => $diff,
+                    'interest' => $interest,
+                    'equalized' => $equalized
+                ];
+            }
+
+            usort($differences, function($a, $b){
+                return $b['equalized'] - $a['equalized'];
+            });
+
+            $topSubcategories = [];
+            foreach(array_slice($differences, 0, 5) as $diff){
+                $topSubcategories[]=[
+                    'name' => $this->subcategoryService->findAllById($diff['subcategory'])['name'],
+                    'percentage' => $friendPercentages[$diff['subcategory']]
+                ];
+            }
+            
+            $matchSum = 0;
+            foreach($differences as $match){
+                $matchSum+=$match['equalized'];
+            }
+
+            $matchesEqualized = $matchSum/count($matches);
+            $matchPercent = ($myMatchPercent + $friendMatchPercent)/2;
+            $matchWeight = count($matches)/5;
+
+            $recommendation = ($matchesEqualized + ($matchPercent*$matchWeight))/(1+$matchWeight);
+
+            $recommendations[] = [
+                'id' => $friend->getId(),
+                'name' => $friend->getFirstName(),
+                'location' => $friend->getLocation(),
+                'match' => intval($recommendation),
+                'top' => $topSubcategories
+            ];
+        }
+
+        return new JsonResponse($recommendations);
     }
 
     /**

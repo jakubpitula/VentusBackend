@@ -171,6 +171,7 @@ class UserController extends AbstractController
             'name' => $friend->getFirstName(),
             'location' => $friend->getLocation(),
             'birthday' => $friend->getBirthday(),
+            'messenger' => $friend->getMessenger(),
             'match' => $recommendation,
             'subcategories' => $subcategories
         ];

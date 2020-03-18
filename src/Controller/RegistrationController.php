@@ -75,8 +75,8 @@ class RegistrationController extends BaseController
         if(!isset($data['messenger'])) return new JsonResponse(['error' => 'Messenger not set'], 400);
 
         if(strlen($data['password']) < 8) return new JsonResponse(['error' => 'Password too short'], 400); 
-        if(!filter_var($data['messenger'], FILTER_VALIDATE_URL)) return new JsonResponse(['error' => 'Invalid link'], 400);
-        if(!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) return new JsonResponse(['error' => 'Invalid email'], 400);
+        if(!filter_var(trim($data['messenger']), FILTER_VALIDATE_URL)) return new JsonResponse(['error' => 'Invalid link'], 400);
+        if(!filter_var(trim($data['email']), FILTER_VALIDATE_EMAIL)) return new JsonResponse(['error' => 'Invalid email'], 400);
 
         if($isEmailUnique!==null) return new JsonResponse(['error' => 'Email already exists'], 400);
 

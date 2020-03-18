@@ -129,3 +129,10 @@ Jeśli wszystko potoczy się pomyślnie, zwrócone zostanie 201.
 /api/user/recommended_subcategories
 ```
 Request POST. Zwraca listę podkategorii przypisanych do kategorii zalogowanego usera posortowaną według ich popularności.
+
+### 10.2 Rekomendacje użytkownikóœ:
+
+```
+/api/user/recommendations
+```
+Zwraca listę użytkowników dopasowanych do zalogowanego użytkownika wraz z procentowym stopniem ich dopasowania.

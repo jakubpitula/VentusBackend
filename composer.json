@@ -10,6 +10,7 @@
         "doctrine/orm": "^2.6",
         "friendsofsymfony/user-bundle": "~2.0",
         "gesdinet/jwt-refresh-token-bundle": "^0.8.2",
+        "intervention/image": "^2.5",
         "knplabs/knp-gaufrette-bundle": "^0.6.1",
         "knpuniversity/oauth2-client-bundle": "^1.29",
         "league/oauth2-facebook": "^2.0",

@@ -67,10 +67,7 @@ class User extends BaseUser
      * NOTE: This is not a mapped field of entity metadata, just a simple property.
      * 
      * 
-     * @Assert\File(
-     *     mimeTypes={"image/jpeg", "image/png", "image/bmp", "image/gif"},
-     *     mimeTypesMessage = "Upload a picture."
-     * )
+     * @Assert\Image()
      * @Vich\UploadableField(mapping="pictures", fileNameProperty="pictureName")
      * @var File
      */

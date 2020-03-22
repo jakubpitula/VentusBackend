@@ -23,6 +23,7 @@ use FOS\UserBundle\Controller\RegistrationController as BaseController;
 use App\Entity\User;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Intervention\Image\ImageManagerStatic as Image;
 
 /**
  * Controller managing the registration.
@@ -87,7 +88,12 @@ class RegistrationController extends BaseController
         $user->setPassword($this->encoder->encodePassword($user, $data['password']));
         $user->setBirthday($data['birthday']);
         $user->setMessenger($data['messenger']);
-        if(isset($files['picture'])) $user->setPictureFile($files['picture']);
+        if(isset($files['picture'])){
+            $image  = Image::make($files['picture'])->resize(300, 300);
+            $image->save();
+            
+            $user->setPictureFile($files['picture']);
+        } 
         
         $this->em->persist($user);
         $this->em->flush();

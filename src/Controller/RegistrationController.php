@@ -89,8 +89,8 @@ class RegistrationController extends BaseController
         $user->setBirthday($data['birthday']);
         $user->setMessenger($data['messenger']);
         if(isset($files['picture'])){
-            $image  = Image::make($files['picture'])->resize(300, 300);
-            $image->save();
+            // $image  = Image::make($files['picture'])->resize(300, 300);
+            // $image->save();
             
             $user->setPictureFile($files['picture']);
         } 

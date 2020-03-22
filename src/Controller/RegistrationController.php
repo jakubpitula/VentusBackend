@@ -24,7 +24,6 @@ use App\Entity\User;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Intervention\Image\ImageManagerStatic as Image;
-use Symfony\Component\Form\FormInterface;
 
 /**
  * Controller managing the registration.
@@ -51,14 +50,6 @@ class RegistrationController extends BaseController
         $this->em = $em;
     }
 
-    private function processForm(Request $request, FormInterface $form)
-    {
-        $data = json_decode($request->getContent(), true);
-        $clearMissing = $request->getMethod() != 'PATCH';
-
-        $form->submit($data, $clearMissing);
-    }
-
     public function registerAction(Request $request)
     {
         $user = new User();
@@ -69,11 +60,6 @@ class RegistrationController extends BaseController
 
         if (null !== $event->getResponse()) {
             return $event->getResponse();
-        }
-        $this->processForm($request, $form);
-
-        if(!$form->isValid()){
-            dd((string)$form->getErrors(true,false));
         }
 
         $data = $request->request->all();

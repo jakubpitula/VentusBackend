@@ -24,6 +24,7 @@ use App\Entity\User;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Intervention\Image\ImageManagerStatic as Image;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * Controller managing the registration.
@@ -64,7 +65,7 @@ class RegistrationController extends BaseController
 
         $data = $request->request->all();
         $files = $request->files->all();
-        
+
         $isEmailUnique = isset($data['email']) ? $this->userManager->findUserByEmail($data['email']) : null;
 
         if(!isset($data['password'])) return new JsonResponse(['error' => 'Password not set'], 400);
@@ -89,9 +90,35 @@ class RegistrationController extends BaseController
         $user->setBirthday($data['birthday']);
         $user->setMessenger($data['messenger']);
         if(isset($files['picture'])){
-            // $image = Image::make($files['picture']);
-            // $image->resize(300,300);
-            // $image->save();
+            $mimeOk = false;
+
+            $mime = $files['picture']->getMimeType();
+            $mimeTypes = [
+                'image/jpeg',
+                'image/png',
+                'image/gif',
+                'image/bmp',
+                'image/tiff'
+            ];
+
+            foreach ($mimeTypes as $mimeType) {
+                if ($mimeType === $mime) {
+                    $mimeOk = true;
+                }
+    
+                if ($discrete = strstr($mimeType, '/*', true)) {
+                    if (strstr($mime, '/', true) === $discrete) {
+                        $mimeOk = true;
+                    }
+                }
+            }
+
+            if($files['picture']->getSize()>50000000) return new JsonResponse(['error' => 'Uploaded file is too large.'], 400);
+            if (!$mimeOk) return new JsonResponse(['error' => 'Uploaded file is not an image.'], 400);
+
+            $image = Image::make($files['picture']);
+            $image->resize(300,300);
+            $image->save();
             
             $user->setPictureFile($files['picture']);
         } 

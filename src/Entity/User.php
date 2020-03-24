@@ -66,9 +66,6 @@ class User extends BaseUser
 
     /**
      * NOTE: This is not a mapped field of entity metadata, just a simple property.
-     * 
-     * 
-     * @CustomAssert\IsImage
      * @Vich\UploadableField(mapping="pictures", fileNameProperty="pictureName")
      * @var File
      */

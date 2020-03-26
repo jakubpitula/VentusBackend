@@ -21,10 +21,12 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use FOS\UserBundle\Controller\RegistrationController as BaseController;
 use App\Entity\User;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Doctrine\ORM\EntityManagerInterface;
-use Intervention\Image\ImageManagerStatic as Image;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\Filesystem\Filesystem;
+use App\Service\FileUploader;
 
 /**
  * Controller managing the registration.
@@ -116,10 +118,31 @@ class RegistrationController extends BaseController
             if($files['picture']->getSize()>50000000) return new JsonResponse(['error' => 'Uploaded file is too large.'], 400);
             if (!$mimeOk) return new JsonResponse(['error' => 'Uploaded file is not an image.'], 400);
 
-            $image = Image::make($files['picture']);
-            $image->resize(300,300);
-            $image->save();
-            
+            $file = $files['picture'];
+            // $extension = $file->guessExtension();
+            // $newfilename = sha1(uniqid(mt_rand(), true));
+            // $tmp_folder = $this->get('kernel')->getRootDir() . '/../public/uploads/tmp/'; // folder to store unfiltered temp file
+            // $tmp_imagename = $newfilename.'.'.$extension;
+            // move_uploaded_file($file, $tmp_folder.$tmp_imagename);
+
+            // $tmpImagePathRel = '/uploads/tmp/' . $tmp_imagename;
+
+            // $processedImage = $this->container->get('liip_imagine.data.manager')->find('cache', $tmpImagePathRel);
+            // $newimage_string = $this->container->get('liip_imagine.filter.manager')->applyFilter($processedImage, 'cache')->getContent();
+            // unlink($tmp_folder . $tmp_imagename); // eliminate unfiltered temp file.
+            // $perm_imagepath = $tmp_folder.$file->getClientOriginalName();
+
+            // $f = fopen($perm_imagepath, 'w');
+            // fwrite($f, $newimage_string); 
+            // fclose($f);
+
+            // file_put_contents($newfile->getClientOriginalName(),file_get_contents($perm_imagepath));
+            // $this->get('vich_uploader.upload_handler')->upload($newfile,'pictures');
+            // // $file->move($_ENV['AWS_BASE_URL'].'/'.$_ENV['AWS_BUCKET_NAME'].'/pictures');
+
+            // $filesystem = new Filesystem();
+            // $filesystem->remove($tmp_folder.$tmp_imagename);
+
             $user->setPictureFile($files['picture']);
         } 
         
